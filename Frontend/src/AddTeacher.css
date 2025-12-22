@@ -1,0 +1,79 @@
+.add-teacher {
+  margin-bottom: 30px;
+}
+
+.add-teacher h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.message {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #eef0ff;
+  color: #333;
+  font-size: 14px;
+}
+
+.add-teacher form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.add-teacher input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.add-teacher input:focus {
+  border-color: #6a5af9;
+}
+
+.add-teacher button {
+  grid-column: span 2;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #6a5af9, #7b6cf6);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-teacher button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(106, 90, 249, 0.35);
+}
+
+@media (max-width: 900px) {
+  .add-teacher form {
+    grid-template-columns: 1fr;
+  }
+
+  .add-teacher button {
+    grid-column: span 1;
+  }
+}
+@media (max-width: 500px) {
+  .add-teacher h2 {
+    font-size: 18px;
+  }
+
+  .add-teacher input {
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+
+  .add-student button {
+    font-size: 14px;
+    padding: 11px;
+  }
+}

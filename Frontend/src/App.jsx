@@ -1,4 +1,5 @@
 import React from "react";
+import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import AdminDashboard from "./AdminDashboard.jsx";
@@ -11,7 +12,8 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/teacher" element={<TeacherDashboard />} />
-      <Route path="/student" element={<StudentDashboard />} />
+      <Route path="/student" element=
+      {<StudentDashboard />} />
     </Routes>
   );
 }

@@ -1,3 +1,4 @@
+import "./AddStudent.css";
 import { useState } from "react";
 import axios from "axios";
 
@@ -29,7 +30,6 @@ export default function AddStudent() {
   return (
     <div className="add-student">
       <h2>Add Student</h2>
-      {message && <p className="message">{message}</p>}
       <form onSubmit={handleSubmit}>
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
         <input name="username" placeholder="Username" value={form.username} onChange={handleChange} required />

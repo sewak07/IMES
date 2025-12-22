@@ -1,3 +1,4 @@
+import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +11,7 @@ export default function Login() {
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value, 
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -44,32 +45,40 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
+    <div className="login-page">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={form.email}
-          onChange={handleChange}
-          autoComplete="username"
-        />
+      <div className="left-section">
+        <img src="login-image.png" alt="image" />
+      </div>
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Enter your password"
-          value={form.password}
-          onChange={handleChange}
-          autoComplete="current-password"
-        />
+      <div className="right-section">
+        <div className="login-box">
+          <h2>Sign in</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={form.email}
+              onChange={handleChange}
+              autoComplete="username"
+            />
 
-        {error && <p className="error-msg">{error}</p>}
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value={form.password}
+              onChange={handleChange}
+              autoComplete="current-password"
+            />
 
-        <button type="submit">Login</button>
-      </form>
+            {error && <p className="error-msg">{error}</p>}
+
+            <button type="submit">Login</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

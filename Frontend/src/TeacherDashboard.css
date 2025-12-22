@@ -1,0 +1,110 @@
+.teacher-dashboard-wrapper {
+  font-family: 'Arial', sans-serif;
+  background: #f9f9fb;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #6a5af9;
+  color: white;
+  padding: 15px 20px;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.top-bar h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.content-area {
+  padding: 90px 20px 20px 20px; 
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.subject-semester {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 30px;
+}
+
+.subject-semester h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.subject-semester ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+.subject-semester ul li {
+  padding: 8px 12px;
+  background: #f5f6ff;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333;
+}
+
+.subject-semester input[type="number"] {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 120px;
+}
+
+.subject-semester button {
+  padding: 8px 14px;
+  margin-left: 10px;
+  border-radius: 6px;
+  border: none;
+  background: #6a5af9;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subject-semester button:hover {
+  background: #5548c8;
+}
+
+.sutudens-container {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.sutudens-container h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+
+
+@media (max-width: 768px) {
+  .subject-semester input[type="number"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .subject-semester button {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+}

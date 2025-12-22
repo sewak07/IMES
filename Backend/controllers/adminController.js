@@ -44,7 +44,14 @@ export const addTeacher = async (req, res) => {
     }
 
     const hashed = password ? await hash(password) : undefined;
-    const teacher = new Teacher({ email, username, password: hashed, subjects: subjects || [] });
+
+    const formattedSubjects = Array.isArray(subjects) ? subjects.map(s => ({
+      name: s.name,
+      semester: Number(s.semester) || null,
+    })) : [];
+
+    const teacher = new Teacher({ email, username, password: hashed, subjects: formattedSubjects, });
+
     await teacher.save();
 
     res.status(201).json({ message: "Teacher created", teacherId: teacher._id });

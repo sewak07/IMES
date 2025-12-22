@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import "./ChangePassword.css";
 
 export default function ChangePassword() {
   const [form, setForm] = useState({ oldPassword: "", newPassword: "" });
@@ -27,28 +28,30 @@ export default function ChangePassword() {
   };
 
   return (
-    <div>
-      <h2>Change Password</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          name="oldPassword"
-          placeholder="Old Password"
-          value={form.oldPassword}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="newPassword"
-          placeholder="New Password"
-          value={form.newPassword}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Change Password</button>
-      </form>
+    <div className="change-password-container">
+      <div className="change-password-card">
+        <h2>Change Password</h2>
+        {message && <p>{message}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="password"
+            name="oldPassword"
+            placeholder="Old Password"
+            value={form.oldPassword}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="newPassword"
+            placeholder="New Password"
+            value={form.newPassword}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Change Password</button>
+        </form>
+      </div>
     </div>
   );
 }
