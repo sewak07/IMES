@@ -13,7 +13,8 @@ const router = express.Router();
 router.get("/dashboard", authMiddleware(["Teacher"]), teacherDashboard);
 router.get("/subjects", authMiddleware(["Teacher"]), getAssignedSubjects);
 router.get("/students/:semester", authMiddleware(["Teacher"]), getStudentsBySemester);
-router.put("/marks", authMiddleware(["Teacher"]), updateMarks);
 router.put("/attendance", authMiddleware(["Teacher"]), updateAttendance);
+
+router.post("/marks", authMiddleware(["Teacher"]), updateMarks);
 
 export default router;

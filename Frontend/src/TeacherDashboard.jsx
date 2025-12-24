@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import StudentRow from "./StudentRow";
-import "./TeacherDashboard.css";
+import styles from "./TeacherDashboard.module.css";
 
 export default function TeacherDashboard() {
   const [subjects, setSubjects] = useState([]);
@@ -15,7 +15,6 @@ export default function TeacherDashboard() {
     fetchDashboard();
     fetchSubjects();
   }, []);
-
 
   const fetchDashboard = async () => {
     try {
@@ -54,13 +53,28 @@ export default function TeacherDashboard() {
     }
   };
 
+  const handleAttendanceUpdate = (studentId, updatedAttendance) => {
+    setStudents(prev =>
+      prev.map(student => {
+        if (student._id === studentId) {
+          const newAttendance = student.attendance.map(a => {
+            if (a.subject === updatedAttendance.subject) return updatedAttendance;
+            return a;
+          });
+          return { ...student, attendance: newAttendance };
+        }
+        return student;
+      })
+    );
+  };
+
   return (
-    <div className="teacher-dashboard-wrapper">
-      <div className="top-bar">
+    <div className={styles.teacherDashboardWrapper}>
+      <div className={styles.topBar}>
         <h2>{welcome}</h2>
       </div>
-      <div className="content-area">
-        <div className="subject-semester">
+      <div className={styles.contentArea}>
+        <div className={styles.subjectSemester}>
           <h3>Your Assigned Subjects</h3>
           <ul>
             {subjects.map((s, i) => (
@@ -74,17 +88,17 @@ export default function TeacherDashboard() {
           <input
             type="number"
             value={semester}
-            onChange={(e) => {
-              setSemester(e.target.value);
-              setStudents([]);
-            }}
+            onChange={(e) => { setSemester(e.target.value); setStudents([]); }}
             placeholder="Semester"
+            className={styles.semesterInput}
           />
-          <button onClick={fetchStudents}>Load Students</button>
+          <button className={styles.loadButton} onClick={fetchStudents}>
+            Load Students
+          </button>
         </div>
-        <div className="sutudens-container">
-          <h3>Students</h3>
 
+        <div className={styles.studentsContainer}>
+          <h3>Students</h3>
           {students.map((student) =>
             subjects
               .filter(s => Number(s.semester) === Number(semester))
@@ -94,6 +108,7 @@ export default function TeacherDashboard() {
                   student={student}
                   subject={subject}
                   token={token}
+                  onAttendanceUpdate={handleAttendanceUpdate}
                 />
               ))
           )}

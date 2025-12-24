@@ -1,53 +1,158 @@
 .student-row {
-  border: 1px solid #eee;
-  padding: 12px 16px;
-  margin-bottom: 12px;
+  background: #fff;
   border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .student-info strong {
   font-size: 16px;
+  color: #1a1a1a;
+}
+
+.subject {
+  font-size: 14px;
+  color: #555;
+}
+
+.attendance-status {
+  font-size: 14px;
   color: #333;
+  font-weight: 500;
 }
 
 .attendance-buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .attendance-buttons button {
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 8px 16px;
+  font-size: 14px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .attendance-buttons button.present {
   background: #4caf50;
-  color: white;
+  color: #fff;
 }
 
 .attendance-buttons button.present:hover {
-  background: #3e8e41;
+  background: #43a047;
 }
 
 .attendance-buttons button.absent {
-  background: #ff4d4f;
-  color: white;
+  background: #f44336;
+  color: #fff;
 }
 
 .attendance-buttons button.absent:hover {
-  background: #e04345;
+  background: #e53935;
 }
 
-.attendance-info {
-  font-size: 14px;
+.marks-section h4 {
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.marks-cards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.marks-card {
+  flex: 1 1 250px;
+  background: #f7f7ff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.marks-card h5 {
+  margin-bottom: 12px;
+  font-size: 15px;
   color: #555;
+}
+
+.marks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.marks-grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.marks-grid label {
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #555;
+}
+
+.marks-grid input {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.total-marks {
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.save-btn {
+  padding: 10px 16px;
+  background: #6a5af9;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #5a4bdb;
+}
+
+.nq-badge {
+  margin-left: 10px;
+  padding: 3px 8px;
+  background: #c62828;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
 }

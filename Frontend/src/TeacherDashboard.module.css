@@ -1,11 +1,11 @@
-.teacher-dashboard-wrapper {
+.teacherDashboardWrapper {
   font-family: 'Arial', sans-serif;
   background: #f9f9fb;
   min-height: 100vh;
   padding: 0;
 }
 
-.top-bar {
+.topBar {
   position: fixed;
   top: 0;
   left: 0;
@@ -17,18 +17,18 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.top-bar h2 {
+.topBar h2 {
   margin: 0;
   font-size: 24px;
 }
 
-.content-area {
+.contentArea {
   padding: 90px 20px 20px 20px; 
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.subject-semester {
+.subjectSemester {
   background: #fff;
   padding: 15px;
   border-radius: 12px;
@@ -36,19 +36,19 @@
   margin-bottom: 30px;
 }
 
-.subject-semester h3 {
+.subjectSemester h3 {
   font-size: 20px;
   margin-bottom: 12px;
   color: #333;
 }
 
-.subject-semester ul {
+.subjectSemester ul {
   list-style: none;
   padding-left: 0;
   margin-bottom: 20px;
 }
 
-.subject-semester ul li {
+.subjectSemester ul li {
   padding: 8px 12px;
   background: #f5f6ff;
   margin-bottom: 6px;
@@ -57,7 +57,7 @@
   color: #333;
 }
 
-.subject-semester input[type="number"] {
+.semesterInput {
   padding: 8px 12px;
   font-size: 14px;
   border-radius: 6px;
@@ -65,7 +65,7 @@
   width: 120px;
 }
 
-.subject-semester button {
+.loadButton {
   padding: 8px 14px;
   margin-left: 10px;
   border-radius: 6px;
@@ -77,32 +77,30 @@
   transition: background 0.2s ease;
 }
 
-.subject-semester button:hover {
+.loadButton:hover {
   background: #5548c8;
 }
 
-.sutudens-container {
+.studentsContainer {
   background: #fff;
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-.sutudens-container h3 {
+.studentsContainer h3 {
   font-size: 20px;
   margin-bottom: 12px;
   color: #333;
 }
 
-
-
 @media (max-width: 768px) {
-  .subject-semester input[type="number"] {
+  .semesterInput {
     width: 100%;
     margin-bottom: 10px;
   }
 
-  .subject-semester button {
+  .loadButton {
     width: 100%;
     margin-left: 0;
     margin-bottom: 10px;
