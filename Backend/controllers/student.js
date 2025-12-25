@@ -16,7 +16,6 @@ export const studentDashboard = async (req, res) => {
 // Student performance
 export const studentPerformance = async (req, res) => {
   try {
-    // Make sure to select the correct fields
     const student = await Student.findById(req.user.id).select(
       "username semester attendance marks"
     );

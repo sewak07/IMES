@@ -15,9 +15,10 @@ const teacherSchema = new mongoose.Schema({
   },
   subjects: [{
     name:String,
-    semester:Number
+    semester:Number,
   }],
 });
 
 export const Teacher = mongoose.model("Teacher", teacherSchema);
 export default Teacher;
+

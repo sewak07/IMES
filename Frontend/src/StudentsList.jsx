@@ -38,7 +38,6 @@ export default function StudentLists() {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchStudents();
-      alert("Student deleted");
     } catch (err) {
       alert(err.response?.data?.message || "Error deleting student");
     }
@@ -50,6 +49,7 @@ export default function StudentLists() {
       username: student.username,
       email: student.email,
       semester: student.semester,
+      faculty: student.faculty,
     });
   };
 
@@ -105,6 +105,7 @@ export default function StudentLists() {
               <th>Name</th>
               <th>Email</th>
               <th>Semester</th>
+              <th>Faculty</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -142,6 +143,17 @@ export default function StudentLists() {
                     />
                   ) : (
                     s.semester
+                  )}
+                </td>
+                 <td data-label="Faculty">
+                  {editingId === s._id ? (
+                    <input
+                      type="text"
+                      value={editedData.faculty}
+                      onChange={(e) => handleInputChange("faculty", e.target.value)}
+                    />
+                  ) : (
+                    s.faculty
                   )}
                 </td>
                 <td data-label="Action">

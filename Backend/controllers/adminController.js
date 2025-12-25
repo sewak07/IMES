@@ -8,7 +8,7 @@ const hash = async (plain) => await bcrypt.hash(plain, 10);
 //add student
 export const addStudent = async (req, res) => {
   try {
-    const { email, username, password, semester } = req.body;
+    const { email, username, password, semester, faculty } = req.body;
     if (!email || !username) {
       return res.status(400).json({ message: "email & username required" });
     }
@@ -19,7 +19,7 @@ export const addStudent = async (req, res) => {
 
     const hashed = password ? await hash(password) : undefined;
 
-    const student = new Student({ email, username, password: hashed, semester });
+    const student = new Student({ email, username, password: hashed, semester, faculty });
     await student.save();
 
     res.status(201).json({ message: "student created", studentId: student._id });
@@ -38,6 +38,7 @@ export const addTeacher = async (req, res) => {
     if (!email || !username) {
       return res.status(404).json({ message: "Email and username required" });
     }
+
     const exists = await Teacher.findOne({ email });
     if (exists) {
       return res.status(400).json({ message: "Teacher with this email already exists" });
@@ -118,7 +119,7 @@ export const updateStudent = async (req, res) => {
     const { id } = req.params;
     const updates = { ...req.body };
 
-    if (updates.passeord) {
+    if (updates.password) {
       updates.password = await hash(updates.password);
     }
 
@@ -187,17 +188,12 @@ export const deleteTeacher = async (req, res) => {
 //Assign subjects to teacher
 export const assignSubjectToTeacher = async (req, res) => {
   try {
-    const { teacherId } = req.params;
-    const { subject, semester } = req.body;
-    if (!subject) {
-      return res.status(400).json({ message: "Subject is required" });
-    }
+    const { teacherId } = req.params; const { subject, semester } = req.body;
+    if (!subject) { return res.status(400).json({ message: "Subject is required" }); }
 
     const teacher = await Teacher.findById(teacherId);
-    if (!teacherId) {
-      return res.status(404).json({ message: "Teacher not found" });
-    }
 
+    if (!teacherId) { return res.status(404).json({ message: "Teacher not found" }); }
     teacher.subjects.push({ name: subject, semester: semester || 0 });
     await teacher.save();
 

@@ -6,6 +6,7 @@ import styles from "./TeacherDashboard.module.css";
 export default function TeacherDashboard() {
   const [subjects, setSubjects] = useState([]);
   const [semester, setSemester] = useState("");
+  const [faculty, setFaculty] = useState("");
   const [students, setStudents] = useState([]);
   const [welcome, setWelcome] = useState("");
 
@@ -41,17 +42,22 @@ export default function TeacherDashboard() {
   };
 
   const fetchStudents = async () => {
-    if (!semester) return;
+    if (!semester || !faculty) {
+      alert("Select faculty and semester");
+      return;
+    }
+
     try {
       const res = await axios.get(
-        `http://localhost:9001/api/teacher/students/${semester}`,
+        `http://localhost:9001/api/teacher/students/${faculty}/${semester}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setStudents(res.data.students);
     } catch {
       alert("Failed to load students");
-    }
+    } 
   };
+
 
   const handleAttendanceUpdate = (studentId, updatedAttendance) => {
     setStudents(prev =>
@@ -92,6 +98,19 @@ export default function TeacherDashboard() {
             placeholder="Semester"
             className={styles.semesterInput}
           />
+          <br></br><br></br>
+          <h3>Select Faculty</h3>
+          <input
+            type="text"
+            value={faculty}
+            onChange={(e) => {
+              setFaculty(e.target.value);
+              setStudents([]);
+            }}
+            placeholder="Faculty (e.g. BSc CSIT)"
+            className={styles.semesterInput}
+          />
+
           <button className={styles.loadButton} onClick={fetchStudents}>
             Load Students
           </button>

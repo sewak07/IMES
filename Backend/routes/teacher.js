@@ -3,7 +3,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import {
   teacherDashboard,
   getAssignedSubjects,
-  getStudentsBySemester,
+  getStudentsByFacultyAndSemester,
   updateMarks,
   updateAttendance
 } from "../controllers/teacher.js";
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/dashboard", authMiddleware(["Teacher"]), teacherDashboard);
 router.get("/subjects", authMiddleware(["Teacher"]), getAssignedSubjects);
-router.get("/students/:semester", authMiddleware(["Teacher"]), getStudentsBySemester);
+router.get("/students/:faculty/:semester", authMiddleware(["Teacher"]), getStudentsByFacultyAndSemester);
 router.put("/attendance", authMiddleware(["Teacher"]), updateAttendance);
 
 router.post("/marks", authMiddleware(["Teacher"]), updateMarks);

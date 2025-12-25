@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function AddStudent() {
-  const [form, setForm] = useState({ email: "", username: "", password: "", semester: "" });
+  const [form, setForm] = useState({ email: "", username: "", password: "", semester: "", faculty:"" });
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
 
@@ -21,7 +21,7 @@ export default function AddStudent() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessage(res.data.message);
-      setForm({ email: "", username: "", password: "", semester: "" });
+      setForm({ email: "", username: "", password: "", semester: "", faculty:"" });
     } catch (err) {
       setMessage(err.response?.data?.message || "Something went wrong");
     }
@@ -35,6 +35,7 @@ export default function AddStudent() {
         <input name="username" placeholder="Username" value={form.username} onChange={handleChange} required />
         <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} />
         <input name="semester" type="number" placeholder="Semester" value={form.semester} onChange={handleChange} />
+        <input name="faculty" type="text" placeholder="Faculty" value={form.faculty} onChange={handleChange} />
         <button type="submit">Add Student</button>
       </form>
     </div>

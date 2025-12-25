@@ -32,20 +32,38 @@ export const getAssignedSubjects = async (req, res) => {
 };
 
 // Get students by semester with attendance initialized
-export const getStudentsBySemester = async (req, res) => {
+export const getStudentsByFacultyAndSemester = async (req, res) => {
   try {
     const semester = Number(req.params.semester);
+    const faculty = req.params.faculty.trim(); // IMPORTANT
+
     const teacher = await Teacher.findById(req.user.id);
-    if (!teacher) return res.status(404).json({ message: "Teacher not found" });
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
 
-    const allowed = teacher.subjects.some(s => Number(s.semester) === semester);
-    if (!allowed) return res.status(403).json({ message: "Not allowed to access this semester" });
+    // Teacher must teach at least one subject in this semester
+    const allowed = teacher.subjects.some(
+      s => Number(s.semester) === semester
+    );
 
-    const students = await Student.find({ semester })
-      .sort({ username: 1 }) 
-      .select("username email semester attendance marks");
+    if (!allowed) {
+      return res
+        .status(403)
+        .json({ message: "Not allowed to access this semester" });
+    }
 
-    const subjectsOfSemester = teacher.subjects.filter(s => Number(s.semester) === semester);
+    // ✅ CASE-INSENSITIVE FACULTY MATCH
+    const students = await Student.find({
+      semester,
+      faculty: { $regex: `^${faculty}$`, $options: "i" }
+    })
+      .sort({ username: 1 })
+      .select("username email semester faculty attendance marks");
+
+    const subjectsOfSemester = teacher.subjects.filter(
+      s => Number(s.semester) === semester
+    );
 
     const studentsWithAttendance = students.map(student => {
       const updatedAttendance = [...(student.attendance || [])];
@@ -63,10 +81,14 @@ export const getStudentsBySemester = async (req, res) => {
         }
       });
 
-      return { ...student.toObject(), attendance: updatedAttendance };
+      return {
+        ...student.toObject(),
+        attendance: updatedAttendance
+      };
     });
 
     res.json({ students: studentsWithAttendance });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
