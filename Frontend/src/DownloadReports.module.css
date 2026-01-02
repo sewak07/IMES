@@ -1,0 +1,160 @@
+/* --------------------
+  Wrapper
+-------------------- */
+.downloadWrapper {
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  background: #f4f6fb;
+  min-height: 100vh;
+}
+
+/* --------------------
+  Page Title
+-------------------- */
+.downloadWrapper h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* --------------------
+  Filters Section
+-------------------- */
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #6a5af9;
+  box-shadow: 0 0 6px rgba(106, 90, 249, 0.2);
+  background: #fff;
+}
+
+/* --------------------
+  Table Styles
+-------------------- */
+.studentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.studentsTable th,
+.studentsTable td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.studentsTable th {
+  background: #6a5af9;
+  border: 1px solid #ccc;
+  color: #fff;
+  font-weight: 600;
+}
+
+.studentsTable tbody tr:hover {
+  background: #f8f6ff;
+  transition: background 0.2s;
+}
+
+/* --------------------
+  Buttons
+-------------------- */
+.actionButton {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: all 0.2s ease;
+}
+
+.viewBtn {
+  background: #6a5af9;
+  color: #fff;
+}
+
+.viewBtn:hover {
+  background: #5846d0;
+}
+
+.downloadBtn {
+  background: #ff6b81;
+  color: #fff;
+}
+
+.downloadBtn:hover {
+  background: #e0556b;
+}
+
+/* --------------------
+  Mobile Styles (Cards)
+-------------------- */
+@media (max-width: 768px) {
+
+  .studentsTable,
+  .studentsTable thead,
+  .studentsTable tbody,
+  .studentsTable th,
+  .studentsTable td,
+  .studentsTable tr {
+    display: block;
+  }
+
+  .studentsTable thead tr {
+    display: none;
+    /* hide desktop headers */
+  }
+
+  .studentsTable tbody tr {
+    margin-bottom: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    padding: 10px;
+  }
+
+  .studentsTable td {
+    padding: 6px 10px;
+    text-align: right;
+    position: relative;
+    border-bottom: none;
+  }
+
+  .studentsTable td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 50%;
+    font-weight: 600;
+    color: #555;
+    text-align: left;
+  }
+
+  /* Buttons at bottom of card */
+  .actionButton {
+    margin: 5px 5px 0 0;
+  }
+}

@@ -1,7 +1,7 @@
-import "./TeacherLists.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SearchBox from "./SearchBox";
+import "./TeacherLists.css";
 
 export default function TeachersLists() {
   const [teachers, setTeachers] = useState([]);
@@ -13,6 +13,10 @@ export default function TeachersLists() {
 
   const token = localStorage.getItem("token");
 
+  useEffect(() => {
+    fetchTeachers();
+  }, []);
+
   const fetchTeachers = async () => {
     try {
       const res = await axios.get("http://localhost:9001/api/admin/teachers", {
@@ -21,13 +25,56 @@ export default function TeachersLists() {
       setTeachers(res.data.teachers || []);
       fetchTeachers();
     } catch (err) {
-      console.error("Error fetching teachers:", err);
+      console.log("Error fetching teachers:", err);
     }
   };
 
-  useEffect(() => {
-    fetchTeachers();
-  }, []);
+  const handleEditClick = (teacher) => {
+    setEditingId(teacher._id);
+    setEditedData({
+      username: teacher.username,
+      email: teacher.email,
+      subjects: teacher.subjects.map(s => ({ ...s })),
+    });
+  };
+
+  const handleInputChange = (field, value, index = null) => {
+    if (field === "subjects") {
+      const newSubjects = [...editedData.subjects];
+      if (value.name !== undefined) newSubjects[index].name = value.name;
+      if (value.semester !== undefined) newSubjects[index].semester = value.semester;
+      setEditedData({ ...editedData, subjects: newSubjects });
+    } else {
+      setEditedData({ ...editedData, [field]: value });
+    }
+  };
+
+  const addNewSubject = () => {
+    const newSubjects = [...(editedData.subjects || []), { name: "", semester: "" }];
+    setEditedData({ ...editedData, subjects: newSubjects });
+  };
+
+  const removeSubject = (index) => {
+    const newSubjects = editedData.subjects.filter((_, i) => i !== index);
+    setEditedData({ ...editedData, subjects: newSubjects });
+  };
+
+  const handleSave = async (id) => {
+    try {
+      const dataToSend = {
+        ...editedData,
+        subjects: editedData.subjects.filter(s => s.name && s.name.trim() !== "")
+      };
+      await axios.put(`http://localhost:9001/api/admin/teacher/${id}`, dataToSend, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setEditingId(null);
+      setEditedData({});
+      fetchTeachers();
+    } catch (err) {
+      alert(err.response?.data?.message || "Error updating teacher");
+    }
+  };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this teacher?")) return;
@@ -41,45 +88,9 @@ export default function TeachersLists() {
     }
   };
 
-  const handleEditClick = (teacher) => {
-    setEditingId(teacher._id);
-    setEditedData({
-      username: teacher.username,
-      email: teacher.email,
-      subjects: teacher.subjects.map(s => ({ ...s }))
-    });
-  };
-
-  const handleInputChange = (field, value, index = null) => {
-    if (field === "subjects") {
-      const updatedSubjects = [...editedData.subjects];
-      updatedSubjects[index].name = value.name ?? updatedSubjects[index].name;
-      updatedSubjects[index].semester = value.semester ?? updatedSubjects[index].semester;
-      setEditedData(prev => ({ ...prev, subjects: updatedSubjects }));
-    } else {
-      setEditedData(prev => ({ ...prev, [field]: value }));
-    }
-  };
-
-  const handleSave = async (id) => {
-    try {
-      await axios.put(
-        `http://localhost:9001/api/admin/teacher/${id}`,
-        editedData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setEditingId(null);
-      setEditedData({});
-      fetchTeachers();
-    } catch (err) {
-      alert(err.response?.data?.message || "Error updating teacher");
-    }
-  };
-
-  const filteredTeachers = teachers.filter(
-    (s) =>
-      s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTeachers = teachers.filter(t =>
+    t.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const indexOfLastTeacher = currentPage * teachersPerPage;
@@ -87,126 +98,101 @@ export default function TeachersLists() {
   const currentTeachers = filteredTeachers.slice(indexOfFirstTeacher, indexOfLastTeacher);
   const totalPages = Math.ceil(filteredTeachers.length / teachersPerPage);
 
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-
   return (
     <div className="teacher-table-wrapper">
       <h3>All Teachers</h3>
       <SearchBox
         value={searchTerm}
-        onChange={(value) => {
-          setSearchTerm(value);
-          setCurrentPage(1);
-        }}
+        onChange={value => { setSearchTerm(value); setCurrentPage(1); }}
         placeholder="Search by name or email..."
       />
-      <div className="table-container">
-        <table>
-          <thead>
+      <table>
+        <thead>
+          <tr>
+            <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Name</th>
+            <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Email</th>
+            <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Subjects</th>
+            <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentTeachers.length === 0 ? (
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Subjects</th>
-              <th>Action</th>
+              <td colSpan="4" style={{ textAlign: "center" }}>No teachers found</td>
             </tr>
-          </thead>
-          <tbody>
-            {currentTeachers.length === 0 ? (
-              <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>
-                  No teachers found
+          ) : (
+            currentTeachers.map(t => (
+              <tr key={t._id}>
+                <td style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
+                  {editingId === t._id ? (
+                    <input
+                      type="text"
+                      value={editedData.username}
+                      onChange={e => handleInputChange("username", e.target.value)}
+                    />
+                  ) : t.username}
                 </td>
-              </tr>
-            ) : (
-              currentTeachers.map((t) => (
-                <tr key={t._id}>
-                  <td data-label="Name">
-                    {editingId === t._id ? (
-                      <input
-                        type="text"
-                        value={editedData.username}
-                        onChange={(e) => handleInputChange("username", e.target.value)}
-                      />
-                    ) : (
-                      t.username
-                    )}
-                  </td>
-                  <td data-label="Email">
-                    {editingId === t._id ? (
-                      <input
-                        type="email"
-                        value={editedData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                      />
-                    ) : (
-                      t.email
-                    )}
-                  </td>
-                  <td data-label="Subjects">
-                    {editingId === t._id ? (
-                      editedData.subjects.map((s, i) => (
+                <td style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
+                  {editingId === t._id ? (
+                    <input
+                      type="email"
+                      value={editedData.email}
+                      onChange={e => handleInputChange("email", e.target.value)}
+                    />
+                  ) : t.email}
+                </td>
+                <td style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
+                  {editingId === t._id ? (
+                    <div>
+                      {editedData.subjects.map((s, i) => (
                         <div key={i} style={{ marginBottom: "5px" }}>
                           <input
                             type="text"
-                            value={s.name}
-                            onChange={(e) =>
-                              handleInputChange("subjects", { name: e.target.value }, i)
-                            }
                             placeholder="Subject Name"
+                            value={s.name}
+                            onChange={e => handleInputChange("subjects", { name: e.target.value }, i)}
                           />
-                          &nbsp;
                           <input
                             type="text"
-                            value={s.semester}
-                            onChange={(e) =>
-                              handleInputChange("subjects", { semester: e.target.value }, i)
-                            }
                             placeholder="Semester"
+                            value={s.semester}
+                            onChange={e => handleInputChange("subjects", { semester: e.target.value }, i)}
                           />
+                          <button onClick={() => removeSubject(i)}>Remove</button>
                         </div>
-                      ))
-                    ) : t.subjects?.length ? (
-                      t.subjects.map(s => `${s.name} (Sem: ${s.semester ?? "N/A"})`).join(", ")
-                    ) : (
-                      "No subjects"
-                    )}
-                  </td>
-                  <td data-label="Action">
-                    {editingId === t._id ? (
-                      <>
-                        <button className="update-btn" onClick={() => handleSave(t._id)}>Save</button>
-                        &nbsp; 
-                        <button onClick={() => setEditingId(null)}>Cancel</button>
-                      </>
-                    ) : (
-                      <>
-                        <button className="update-btn" onClick={() => handleEditClick(t)}>Edit</button>
-                        &nbsp; 
-                        <button className="delete-btn" onClick={() => handleDelete(t._id)}>Delete</button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                      ))}
+                      <button onClick={addNewSubject}>+ Add Subject</button>
+                    </div>
+                  ) : (
+                    t.subjects.length > 0 ? t.subjects.map(s => `${s.name} (Sem: ${s.semester || "N/A"})`).join(", ") : "No subjects"
+                  )}
+                </td>
+                <td>
+                  {editingId === t._id ? (
+                    <>
+                      <button onClick={() => handleSave(t._id)}>Save</button>
+                      <button onClick={() => setEditingId(null)}>Cancel</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => handleEditClick(t)}>Edit</button>
+                      <button onClick={() => handleDelete(t._id)}>Delete</button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
       {totalPages > 1 && (
-        <div className="pagination">
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Prev</button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => handlePageChange(i + 1)}
-              className={currentPage === i + 1 ? "active" : ""}
-            >
-              {i + 1}
-            </button>
+        <div>
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
+          {[...Array(totalPages)].map((_, i) => (
+            <button key={i} onClick={() => setCurrentPage(i + 1)} style={{ fontWeight: currentPage === i + 1 ? "bold" : "normal" }}>{i + 1}</button>
           ))}
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
         </div>
       )}
     </div>

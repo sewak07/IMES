@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import "./StudentDashboard.css";
 
 export default function StudentDashboard() {
   const [dashboardMessage, setDashboardMessage] = useState("");
   const [performanceData, setPerformanceData] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
   const token = localStorage.getItem("token");
 
- 
   const maxMarks = {
-    assignment: 5,
-    labReport: 10,
-    practical: 15,
-    viva: 5,
+    assignment1: 3,
+    assignment2: 3,
+    assignment3: 4,
+    internalPoints: 10,
+    midTermPoints: 10,
     attendance: 5,
   };
 
@@ -24,19 +24,21 @@ export default function StudentDashboard() {
       }
 
       try {
-        const dashboardRes = await axios.get(
+        const dashboardRes = await fetch(
           "http://localhost:9001/api/student/dashboard",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setDashboardMessage(dashboardRes.data.message);
+        const dashboardData = await dashboardRes.json();
+        setDashboardMessage(dashboardData.message);
 
-        const performanceRes = await axios.get(
+        const performanceRes = await fetch(
           "http://localhost:9001/api/student/performance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setPerformanceData(performanceRes.data);
+        const performanceData = await performanceRes.json();
+        setPerformanceData(performanceData);
       } catch (error) {
-        console.error(error.response?.data || error.message);
+        console.error(error.message);
         alert("Failed to load dashboard or performance. Check console.");
       }
     };
@@ -44,138 +46,215 @@ export default function StudentDashboard() {
     fetchDashboardAndPerformance();
   }, [token]);
 
-  if (!performanceData) return <p className="loading">Loading...</p>;
+  if (!performanceData) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p className="loading-text">Loading your performance data...</p>
+      </div>
+    );
+  }
 
-  const getWidth = (obtained, max) => (obtained / max) * 100;
+  const getWidth = (value, max) =>
+    typeof value === "number" ? (value / max) * 100 : 0;
+
+  const calculateOverallPercentage = (p) => {
+    return ((p.totalAssessment / 40) * 100).toFixed(1);
+  };
+
+  const getPerformanceGrade = (percentage) => {
+    if (percentage >= 90) return { grade: "A+", color: "grade-a-plus" };
+    if (percentage >= 80) return { grade: "A", color: "grade-a" };
+    if (percentage >= 70) return { grade: "B", color: "grade-b" };
+    if (percentage >= 60) return { grade: "C", color: "grade-c" };
+    return { grade: "D", color: "grade-d" };
+  };
 
   return (
     <div className="dashboard-container">
-      <h1 className="dashboard-title">{dashboardMessage}</h1>
-      <p className="semester">Semester {performanceData.student.semester}</p>
 
+      {/* Animated Background */}
+      <div className="animated-bg">
+        <div className="bg-circle circle-1"></div>
+        <div className="bg-circle circle-2"></div>
+        <div className="bg-circle circle-3"></div>
+      </div>
+
+      <div className="dashboard-header">
+        {/* IMES Logo / Name */}
+        <div className="imes-logo">IMES</div>
+
+        {/* Welcome Box Centered */}
+        <div className="welcome-box centered">
+          <h2 className="welcome-title">Welcome! {performanceData.student.username}</h2>
+          <div className="semester-info">
+            <span>Semester:</span> {performanceData.student.semester}
+          </div>
+          <p className="dashboard-subtitle">
+            Track your academic progress and achievements
+          </p>
+        </div>
+      </div>
+
+
+
+      {/* Stats Overview */}
+      <div className="stats-overview">
+        <div className="stat-card">
+          <div className="stat-icon">📚</div>
+          <div className="stat-info">
+            <span className="stat-label">Total Subjects</span>
+            <span className="stat-value">{performanceData.performance.length}</span>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">✅</div>
+          <div className="stat-info">
+            <span className="stat-label">Qualified</span>
+            <span className="stat-value">
+              {performanceData.performance.filter((p) => p.isQualified).length}
+            </span>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">❌</div>
+          <div className="stat-info">
+            <span className="stat-label">Not Qualified</span>
+            <span className="stat-value">
+              {performanceData.performance.filter((p) => !p.isQualified).length}
+            </span>
+          </div>
+        </div>
+      </div>
+    <br></br>
+      <h2>Performance</h2>
+      {/* Performance Cards Grid */}
       <div className="performance-grid">
+
         {performanceData.performance.map((p, i) => {
-          const totalAssessment =
-            p.marks.assignment +
-            p.marks.labReport +
-            p.marks.practical +
-            p.marks.viva +
-            (p.attendance.percentage * maxMarks.attendance) / 100;
+          const overallPercentage = calculateOverallPercentage(p);
+          const gradeInfo = getPerformanceGrade(parseFloat(overallPercentage));
+          const isSelected = selectedCard === i;
 
           return (
-            <div className="card" key={i}>
-              <h2 className="subject-title">{p.subject}</h2>
 
-              
-              <div className="attendance">
-                <p className="attendance-label">Attendance</p>
-                <div className="attendance-bar">
-                  <div
-                    className={`attendance-fill ${
-                      p.qualified ? "qualified" : "not-qualified"
-                    }`}
-                    style={{ width: `${p.attendance.percentage}%` }}
-                  ></div>
+            <div className="performance-card" key={i}>
+
+
+              {/* Card Header */}
+              <div
+                className="card-header"
+                onClick={() => setSelectedCard(isSelected ? null : i)}
+              >
+                <h2 className="subject-title">{p.subject}</h2>
+                <div className={`grade-badge ${gradeInfo.color}`}>
+                  <span className="grade-letter">{gradeInfo.grade}</span>
+                  <span className="grade-percentage">{overallPercentage}%</span>
                 </div>
-                <p className="attendance-text">
-                  {p.attendance.attendedDays}/{p.attendance.totalDays} (
-                  {p.attendance.percentage.toFixed(1)}%){" "}
-                  <span
-                    className={p.qualified ? "qualified-text" : "not-qualified-text"}
-                  >
-                    {p.qualified ? "Qualified" : "Not Qualified"}
+              </div>
+
+              {/* Attendance Section */}
+              <div className="attendance-section">
+                <div className="section-header">
+                  <span className="section-icon">📅</span>
+                  <span className="section-title">Attendance Status</span>
+                  <span className={`status-badge ${p.isQualified ? "qualified" : "not-qualified"}`}>
+                    {p.isQualified ? "✓ Qualified" : "✗ Not Qualified"}
                   </span>
+                </div>
+                <div className="attendance-bar-wrapper">
+                  <div className="attendance-bar">
+                    <div
+                      className={`attendance-fill ${p.isQualified ? "fill-qualified" : "fill-not-qualified"}`}
+                      style={{ width: `${p.attendance.percentage}%` }}
+                    >
+                      <span className="bar-label">{p.attendance.percentage.toFixed(1)}%</span>
+                    </div>
+                  </div>
+                </div>
+                <p className="attendance-details">
+                  <span className="attendance-fraction">{p.attendance.attendedDays}/{p.attendance.totalDays}</span>
+                  <span className="attendance-text">days attended</span>
                 </p>
               </div>
 
-              
+              {/* Marks Section */}
               <div className="marks-section">
-                <h3>Internal Examination</h3>
-                <div className="marks-bar">
-                  <div className="mark-item">
-                    <span>Internal:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill internal"
-                        style={{ width: `${getWidth(p.marks.internal, 60)}%` }}
-                      ></div>
+                <h3 className="marks-section-title">
+                  <span className="title-icon">📝</span>
+                  Marks Obtained
+                </h3>
+
+                {["rawInternal", "rawMidTerm"].map((term, idx) => (
+                  <div className="mark-item" key={idx}>
+                    <div className="mark-label-container">
+                      <span className="mark-label">{term === "rawInternal" ? "1st Term" : "2nd Term"}</span>
                     </div>
-                    <span>{p.marks.internal}/60</span>
+                    <div className="mark-bar-container">
+                      <div className="mark-bar">
+                        <div
+                          className={`mark-bar-fill ${term === "rawInternal" ? "term-1" : "term-2"}`}
+                          style={{ width: `${getWidth(p.marks[term] || 0, 60)}%` }}
+                        ></div>
+                      </div>
+                      <span className="mark-value">{p.marks[term] || 0}/60</span>
+                    </div>
                   </div>
-                  <div className="mark-item">
-                    <span>Mid Term:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill midterm"
-                        style={{ width: `${getWidth(p.marks.midTerm, 60)}%` }}
-                      ></div>
+                ))}
+              </div>
+
+              {/* Expandable Section */}
+              <div className="expandable-section" style={{ display: isSelected ? "block" : "none" }}>
+
+                {/* Internal Assessment Section */}
+                <div className="marks-section">
+                  <h3 className="marks-section-title">
+                    <span className="title-icon">📋</span>
+                    Internal Assessment
+                  </h3>
+
+                  {["internal", "midTerm", "assignment1", "assignment2", "assignment3", "attendanceMarks"].map((mark, idx) => (
+                    <div className="mark-item" key={idx}>
+                      <div className="mark-label-container">
+                        <span className="mark-label">
+                          {mark === "internal" ? "1st Term Points" :
+                            mark === "midTerm" ? "2nd Term Points" :
+                              mark.includes("assignment") ? `Assignment ${mark.slice(-1)}` :
+                                "Attendance Marks"}
+                        </span>
+                      </div>
+                      <div className="mark-bar-container">
+                        <div className="mark-bar">
+                          <div
+                            className={`mark-bar-fill ${mark === "internal" ? "internal-1" :
+                              mark === "midTerm" ? "internal-2" :
+                                mark.includes("assignment") ? "assignment" :
+                                  "attendance-mark"
+                              }`}
+                            style={{
+                              width: `${getWidth(p.marks[mark], maxMarks[mark] || maxMarks.attendance)}%`
+                            }}
+                          ></div>
+                        </div>
+                        <span className="mark-value">{p.marks[mark]}/{maxMarks[mark] || maxMarks.attendance}</span>
+                      </div>
                     </div>
-                    <span>{p.marks.midTerm}/60</span>
+                  ))}
+
+                  {/* Total Assessment */}
+                  <div className="total-assessment">
+                    <span className="total-label">Total Assessment Marks</span>
+                    <strong className="total-value">{p.totalAssessment}/40</strong>
                   </div>
                 </div>
               </div>
 
-              
-              <div className="marks-section">
-                <h3>Internal Assessment</h3>
-                <div className="marks-bar">
-                  <div className="mark-item">
-                    <span>Assignment:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill assignment"
-                        style={{ width: `${getWidth(p.marks.assignment, maxMarks.assignment)}%` }}
-                      ></div>
-                    </div>
-                    <span>{p.marks.assignment}/5</span>
-                  </div>
-                  <div className="mark-item">
-                    <span>Lab Report:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill lab"
-                        style={{ width: `${getWidth(p.marks.labReport, maxMarks.labReport)}%` }}
-                      ></div>
-                    </div>
-                    <span>{p.marks.labReport}/10</span>
-                  </div>
-                  <div className="mark-item">
-                    <span>Practical:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill practical"
-                        style={{ width: `${getWidth(p.marks.practical, maxMarks.practical)}%` }}
-                      ></div>
-                    </div>
-                    <span>{p.marks.practical}/15</span>
-                  </div>
-                  <div className="mark-item">
-                    <span>Viva:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill viva"
-                        style={{ width: `${getWidth(p.marks.viva, maxMarks.viva)}%` }}
-                      ></div>
-                    </div>
-                    <span>{p.marks.viva}/5</span>
-                  </div>
-                  <div className="mark-item">
-                    <span>Attendance:</span>
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill attendance-mark"
-                        style={{
-                          width: `${getWidth((p.attendance.percentage * maxMarks.attendance) / 100, maxMarks.attendance)}%`,
-                        }}
-                      ></div>
-                    </div>
-                    <span>{((p.attendance.percentage * maxMarks.attendance) / 100).toFixed(1)}/5</span>
-                  </div>
-                  <div className="mark-item total-assessment">
-                    <span>Total Internal Assessment Marks:</span>
-                    <strong>{totalAssessment.toFixed(1)}/40</strong>
-                  </div>
-                </div>
+              {/* Expand Indicator */}
+              <div
+                className="expand-indicator"
+                onClick={() => setSelectedCard(isSelected ? null : i)}
+              >
+                {isSelected ? "Click to collapse ▲" : "Click to expand ▼"}
               </div>
             </div>
           );

@@ -102,17 +102,18 @@ export default function StudentLists() {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Semester</th>
-              <th>Faculty</th>
-              <th>Action</th>
+              <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Name</th>
+              <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Email</th>
+              <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Semester</th>
+              <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Program</th>
+              <th style={{ border: "1px solid #ddd", padding: "0.5rem" }}>Action</th>
             </tr>
           </thead>
           <tbody>
             {currentStudents.map((s) => (
               <tr key={s._id}>
-                <td data-label="Name">
+                <td data-label="Name"
+                  style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === s._id ? (
                     <input
                       type="text"
@@ -123,7 +124,8 @@ export default function StudentLists() {
                     s.username
                   )}
                 </td>
-                <td data-label="Email">
+                <td data-label="Email"
+                  style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === s._id ? (
                     <input
                       type="email"
@@ -134,7 +136,8 @@ export default function StudentLists() {
                     s.email
                   )}
                 </td>
-                <td data-label="Semester">
+                <td data-label="Semester"
+                  style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === s._id ? (
                     <input
                       type="text"
@@ -145,7 +148,8 @@ export default function StudentLists() {
                     s.semester
                   )}
                 </td>
-                 <td data-label="Faculty">
+                <td data-label="Faculty"
+                  style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === s._id ? (
                     <input
                       type="text"
@@ -156,7 +160,8 @@ export default function StudentLists() {
                     s.faculty
                   )}
                 </td>
-                <td data-label="Action">
+                <td data-label="Action"
+                  style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === s._id ? (
                     <>
                       <button className="update-btn" onClick={() => handleSave(s._id)}>Save</button>

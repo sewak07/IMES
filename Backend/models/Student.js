@@ -13,12 +13,15 @@ const marksSchema = new mongoose.Schema({
   semester: { type: Number, required: true },
   internal: { type: Number, default: 0 },
   midTerm: { type: Number, default: 0 },
-  assignment: { type: Number, default: 0 },
-  labReport: { type: Number, default: 0 },
-  practical: { type: Number, default: 0 },
-  viva: { type: Number, default: 0 },
+  assignment1: { type: Number, default: 0 },
+  assignment2: { type: Number, default: 0 },
+  assignment3: { type: Number, default: 0 },
+  assignment1Submitted: { type: Boolean, default: false },
+  assignment2Submitted: { type: Boolean, default: false },
+  assignment3Submitted: { type: Boolean, default: false },
   total: { type: Number, default: 0 }
 });
+
 const studentSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, unique: true, required: true },

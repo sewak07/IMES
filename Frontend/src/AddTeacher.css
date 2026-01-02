@@ -1,79 +1,240 @@
 .add-teacher {
-  margin-bottom: 30px;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .add-teacher h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+  font-size: 24px;
   color: #333;
+  text-align: center;
+  font-weight: 700;
 }
 
-.message {
-  margin-bottom: 12px;
-  padding: 10px 14px;
+.add-teacher h3 {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.add-teacher .message {
+  padding: 12px 16px;
   border-radius: 8px;
-  background: #eef0ff;
-  color: #333;
   font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  animation: slideIn 0.3s ease;
+}
+
+.add-teacher .message {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
 }
 
 .add-teacher form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.add-teacher input {
-  padding: 10px 12px;
+.add-teacher input,
+.add-teacher select {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  border: 1px solid #ccc;
   font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  background: #f9fafb;
+}
+
+.add-teacher input:focus,
+.add-teacher select:focus {
   outline: none;
-  transition: border 0.2s ease;
-}
-
-.add-teacher input:focus {
   border-color: #6a5af9;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.1);
 }
 
-.add-teacher button {
-  grid-column: span 2;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #6a5af9, #7b6cf6);
-  color: white;
-  font-size: 15px;
+.add-teacher input::placeholder {
+  color: #999;
+}
+
+.add-teacher select {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #333;
 }
 
-.add-teacher button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(106, 90, 249, 0.35);
+.add-teacher select:invalid,
+.add-teacher select[value=""] {
+  color: #999;
 }
 
-@media (max-width: 900px) {
-  .add-teacher form {
-    grid-template-columns: 1fr;
+.add-teacher select option:first-child {
+  color: #999;
+}
+
+.add-teacher select option:not(:first-child) {
+  color: #333;
+}
+
+/* Subject fields container */
+.add-teacher .subject-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.add-teacher .subject-field input {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-teacher .subject-field select {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-teacher .subject-field button {
+  padding: 8px 16px;
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-teacher .subject-field button:hover {
+  background: #e04345;
+}
+
+/* Form buttons */
+.add-teacher form > button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+/* Add Another Subject button - GREEN */
+.add-teacher form > button[type="button"] {
+  background: #4caf50;
+  color: white;
+}
+
+.add-teacher form > button[type="button"]:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Add Teacher submit button - BLUE */
+.add-teacher form > button[type="submit"] {
+  background: #6a5af9;
+  color: white;
+}
+
+.add-teacher form > button[type="submit"]:hover {
+  background: #5848d9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(106, 90, 249, 0.3);
+}
+
+.add-teacher form > button:active {
+  transform: translateY(0);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .add-teacher {
+    margin: 20px;
+    padding: 24px 20px;
   }
 
-  .add-teacher button {
-    grid-column: span 1;
+  .add-teacher h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .add-teacher h3 {
+    font-size: 16px;
+  }
+
+  .add-teacher input,
+  .add-teacher select {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .add-teacher .subject-field {
+    flex-wrap: wrap;
+  }
+
+  .add-teacher .subject-field input,
+  .add-teacher .subject-field select {
+    flex: 1 1 100%;
+  }
+
+  .add-teacher .subject-field button {
+    flex: 1 1 100%;
+    margin-top: 5px;
+  }
+
+  .add-teacher form > button {
+    padding: 11px 18px;
+    font-size: 14px;
   }
 }
-@media (max-width: 500px) {
+
+@media (max-width: 480px) {
+  .add-teacher {
+    margin: 15px;
+    padding: 20px 16px;
+  }
+
   .add-teacher h2 {
     font-size: 18px;
   }
 
-  .add-teacher input {
-    font-size: 13px;
-    padding: 9px 10px;
+  .add-teacher h3 {
+    font-size: 15px;
   }
 
-  .add-student button {
-    font-size: 14px;
-    padding: 11px;
+  .add-teacher form {
+    gap: 14px;
+  }
+
+  .add-teacher input,
+  .add-teacher select {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 }

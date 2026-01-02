@@ -1,108 +1,181 @@
+/* --------------------
+  Dashboard Wrapper
+-------------------- */
 .teacherDashboardWrapper {
-  font-family: 'Arial', sans-serif;
-  background: #f9f9fb;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f4f6fb;
+  color: #333;
 }
 
+/* --------------------
+  Top Header
+-------------------- */
 .topBar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: #6a5af9;
-  color: white;
-  padding: 15px 20px;
-  z-index: 10;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background: linear-gradient(90deg, #6a5af9, #a56eff);
+  padding: 20px 30px;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
-.topBar h2 {
-  margin: 0;
-  font-size: 24px;
-}
-
+/* --------------------
+  Main Content Area
+-------------------- */
 .contentArea {
-  padding: 90px 20px 20px 20px; 
-  max-width: 1200px;
-  margin: 0 auto;
+  display: flex;
+  flex: 1;
+  padding: 20px 30px;
+  gap: 30px;
 }
 
-.subjectSemester {
+/* --------------------
+  Left Panel
+-------------------- */
+.leftPanel {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Card Style */
+.card {
   background: #fff;
-  padding: 15px;
+  padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
 }
 
-.subjectSemester h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  color: #333;
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 
-.subjectSemester ul {
+/* --------------------
+  Subject List
+-------------------- */
+.subjectList {
   list-style: none;
-  padding-left: 0;
-  margin-bottom: 20px;
+  padding: 0;
+  margin: 0;
 }
 
-.subjectSemester ul li {
-  padding: 8px 12px;
-  background: #f5f6ff;
-  margin-bottom: 6px;
-  border-radius: 8px;
+.subjectItem {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
   font-size: 15px;
-  color: #333;
+  transition: all 0.2s ease;
 }
 
-.semesterInput {
-  padding: 8px 12px;
-  font-size: 14px;
+.subjectItem:hover {
+  background: #f8f6ff;
+  border-radius: 6px;
+  padding-left: 8px;
+}
+
+/* --------------------
+  Select Inputs
+-------------------- */
+.selectGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.selectInput {
+  padding: 8px 10px;
+  font-size: 15px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  width: 120px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.selectInput:focus {
+  border-color: #6a5af9;
+  box-shadow: 0 0 6px rgba(106, 90, 249, 0.2);
+}
+
+/* --------------------
+  Buttons
+-------------------- */
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
 }
 
 .loadButton {
-  padding: 8px 14px;
-  margin-left: 10px;
-  border-radius: 6px;
-  border: none;
-  background: #6a5af9;
-  color: white;
+  flex: 1;
+  padding: 10px 12px;
   font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  border: none;
+  transition: all 0.2s ease;
 }
 
-.loadButton:hover {
-  background: #5548c8;
+.attendanceBtn {
+  background: #6a5af9;
+  color: #fff;
 }
 
-.studentsContainer {
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+.attendanceBtn:hover {
+  background: #5846d0;
 }
 
-.studentsContainer h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  color: #333;
+.marksBtn {
+  background: #ff6b81;
+  color: #fff;
 }
 
-@media (max-width: 768px) {
-  .semesterInput {
-    width: 100%;
-    margin-bottom: 10px;
+.marksBtn:hover {
+  background: #e0556b;
+}
+
+/* --------------------
+  Right Panel
+-------------------- */
+.rightPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.noData {
+  color: #777;
+  font-style: italic;
+}
+
+.errorText {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+/* --------------------
+  Responsive
+-------------------- */
+@media (max-width: 1024px) {
+  .contentArea {
+    flex-direction: column;
   }
 
-  .loadButton {
-    width: 100%;
-    margin-left: 0;
-    margin-bottom: 10px;
+  .leftPanel {
+    flex: 1;
+  }
+
+  .rightPanel {
+    flex: 1;
   }
 }

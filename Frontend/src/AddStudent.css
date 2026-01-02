@@ -1,79 +1,137 @@
 .add-student {
-  margin-bottom: 30px;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .add-student h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+  font-size: 24px;
   color: #333;
-}
-
-.message {
-  margin-bottom: 12px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: #eef0ff;
-  color: #333;
-  font-size: 14px;
+  text-align: center;
+  font-weight: 700;
 }
 
 .add-student form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.add-student input {
-  padding: 10px 12px;
+.add-student input,
+.add-student select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  border: 1px solid #ccc;
   font-size: 14px;
-  outline: none;
-  transition: border 0.2s ease;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  background: #f9fafb;
 }
 
-.add-student input:focus {
+.add-student input:focus,
+.add-student select:focus {
+  outline: none;
   border-color: #6a5af9;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.1);
+}
+
+.add-student input::placeholder {
+  color: #999;
+}
+
+.add-student select {
+  cursor: pointer;
+  color: #333;
+}
+
+.add-student select option {
+  padding: 10px;
+}
+
+.add-student select:invalid,
+.add-student select[value=""] {
+  color: #999;
+}
+
+.add-student select option:first-child {
+  color: #999;
+}
+
+.add-student select option:not(:first-child) {
+  color: #333;
 }
 
 .add-student button {
-  grid-column: span 2;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #6a5af9, #7b6cf6);
+  padding: 12px 20px;
+  background: #6a5af9;
   color: white;
+  border: none;
+  border-radius: 8px;
   font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  margin-top: 8px;
 }
 
 .add-student button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(106, 90, 249, 0.35);
+  background: #5848d9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(106, 90, 249, 0.3);
 }
 
-@media (max-width: 900px) {
-  .add-student form {
-    grid-template-columns: 1fr;
+.add-student button:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .add-student {
+    margin: 20px;
+    padding: 24px 20px;
+  }
+
+  .add-student h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .add-student input,
+  .add-student select {
+    padding: 10px 14px;
+    font-size: 13px;
   }
 
   .add-student button {
-    grid-column: span 1;
+    padding: 11px 18px;
+    font-size: 14px;
   }
 }
-@media (max-width: 500px) {
+
+@media (max-width: 480px) {
+  .add-student {
+    margin: 15px;
+    padding: 20px 16px;
+  }
+
   .add-student h2 {
     font-size: 18px;
   }
 
-  .add-student input {
-    font-size: 13px;
-    padding: 9px 10px;
+  .add-student form {
+    gap: 14px;
   }
 
-  .add-student button {
-    font-size: 14px;
-    padding: 11px;
+  .add-student input,
+  .add-student select {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 }

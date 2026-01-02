@@ -1,0 +1,93 @@
+.performance-wrapper {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.performance-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.performance-header h2 {
+  font-size: 2rem;
+  color: #3b3b3b;
+}
+
+.performance-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.performance-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.performance-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.performance-card h3 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.row span.qualified {
+  color: green;
+  font-weight: 600;
+}
+
+.row span.not-qualified {
+  color: red;
+  font-weight: 600;
+}
+
+.row.assignments {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.total-assessment {
+  margin-top: 1rem;
+  background: #f0f4ff;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 8px;
+  color: #1f3c88;
+}
+
+.status-msg {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.status-msg.error {
+  color: red;
+}

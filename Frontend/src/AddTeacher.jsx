@@ -57,9 +57,9 @@ export default function AddTeacher() {
         <input name="username" placeholder="Username" value={form.username} onChange={handleFormChange} required />
         <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleFormChange} required />
 
-        <br></br>
+        <br /><br />
         <h3>Subjects</h3>
-        <br></br>
+        <br />
         {subjects.map((subj, index) => (
           <div key={index} className="subject-field">
             <input
@@ -70,13 +70,24 @@ export default function AddTeacher() {
               required
             />
             &nbsp;&nbsp;
-            <input
+
+            <select
               name="sem"
-              type="number"
-              placeholder="Semester"
               value={subj.sem}
               onChange={(e) => handleSubjectChange(index, e)}
-            />
+              required
+            >
+              <option value="">Select Semester</option>
+              <option value="1">1st Semester</option>
+              <option value="2">2nd Semester</option>
+              <option value="3">3rd Semester</option>
+              <option value="4">4th Semester</option>
+              <option value="5">5th Semester</option>
+              <option value="6">6th Semester</option>
+              <option value="7">7th Semester</option>
+              <option value="8">8th Semester</option>
+            </select>
+
             {subjects.length > 1 && (
               <button type="button" onClick={() => removeSubjectField(index)}>Remove</button>
             )}
