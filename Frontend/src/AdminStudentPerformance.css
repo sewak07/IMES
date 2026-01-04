@@ -1,93 +1,146 @@
+/* ---------- Wrapper & Header ---------- */
 .performance-wrapper {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  max-width: 1250px;
+  margin: 2.5rem auto;
+  padding: 0 1.2rem;
   font-family: "Segoe UI", sans-serif;
+  color: #333;
 }
 
 .performance-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .performance-header h2 {
-  font-size: 2rem;
-  color: #3b3b3b;
+  font-size: 2.3rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #7b6cf6, #6a5af9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .performance-header p {
-  color: #666;
   font-size: 1rem;
+  color: #777;
+  margin-top: 0.4rem;
 }
 
+/* ---------- Go Back Button ---------- */
+.go-back-btn {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  padding: 0.55rem 1.2rem;
+  background: linear-gradient(135deg, #7b6cf6, #6a5af9);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.go-back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  background: linear-gradient(135deg, #5848c2, #7b6cf6);
+}
+
+/* ---------- Grid Layout ---------- */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.8rem;
 }
 
+/* ---------- Performance Card ---------- */
 .performance-card {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: #ffffff;
+  padding: 1.8rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #7b6cf6;
+  transition: all 0.25s ease-in-out;
+  position: relative;
 }
 
 .performance-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 .performance-card h3 {
   margin-bottom: 1rem;
-  color: #2c3e50;
-  font-size: 1.3rem;
-  border-bottom: 1px solid #eee;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #3b3b3b;
+  border-bottom: 1px solid #f0f0f0;
   padding-bottom: 0.5rem;
 }
 
+/* ---------- Rows ---------- */
 .row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.96rem;
   color: #444;
 }
 
 .row span.qualified {
-  color: green;
+  color: #28a745;
   font-weight: 600;
 }
 
 .row span.not-qualified {
-  color: red;
+  color: #dc3545;
   font-weight: 600;
 }
 
 .row.assignments {
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.91rem;
   color: #555;
 }
 
+/* ---------- Total Assessment ---------- */
 .total-assessment {
-  margin-top: 1rem;
-  background: #f0f4ff;
-  padding: 0.6rem 1rem;
+  margin-top: 1.3rem;
+  background: linear-gradient(135deg, #eef1ff, #e1e5ff);
+  padding: 0.75rem 1rem;
   text-align: center;
-  font-weight: bold;
-  border-radius: 8px;
-  color: #1f3c88;
+  font-weight: 700;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  color: #3b3b3b;
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.06);
 }
 
+/* ---------- Status Messages ---------- */
 .status-msg {
   text-align: center;
-  margin-top: 2rem;
-  font-size: 1.1rem;
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
   color: #333;
+  font-weight: 500;
 }
 
 .status-msg.error {
-  color: red;
+  color: #dc3545;
+}
+
+/* ---------- Responsive Adjustments ---------- */
+@media (max-width: 768px) {
+  .performance-wrapper {
+    padding: 0 1rem;
+  }
+
+  .cards-grid {
+    gap: 1.2rem;
+  }
+
+  .performance-card {
+    padding: 1.4rem;
+  }
 }

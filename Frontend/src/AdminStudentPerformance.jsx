@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AdminStudentPerformance.css";
 
 export default function AdminStudentPerformance() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [performance, setPerformance] = useState([]);
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,22 +33,22 @@ export default function AdminStudentPerformance() {
     fetchPerformance();
   }, [id, token]);
 
-  if (loading)
-    return <p className="status-msg">Loading...</p>;
-  if (error)
-    return <p className="status-msg error">{error}</p>;
-  if (!student)
-    return <p className="status-msg">Student not found.</p>;
+  if (loading) return <p className="status-msg">Loading...</p>;
+  if (error) return <p className="status-msg error">{error}</p>;
+  if (!student) return <p className="status-msg">Student not found.</p>;
   if (!performance.length)
     return <p className="status-msg">No performance data available.</p>;
 
   return (
     <div className="performance-wrapper">
+      {/* Go Back Button */}
+      <button className="go-back-btn" onClick={() => navigate("/admin")}>
+        &larr; Go Back
+      </button>
+
       <header className="performance-header">
         <h2>{student.username}</h2>
-        <p>
-          Semester {student.semester} | Program: {student.faculty}
-        </p>
+        <p>Semester {student.semester} | Program: {student.faculty}</p>
       </header>
 
       <div className="cards-grid">
@@ -67,10 +68,13 @@ export default function AdminStudentPerformance() {
               <div className="row">
                 <span>Attendance:</span>
                 <span>
-                  {p.attendance?.attendedDays ?? 0}/
-                  {p.attendance?.totalDays ?? 0} (
+                  {p.attendance?.attendedDays ?? 0}/{p.attendance?.totalDays ?? 0} (
                   {(p.attendance?.percentage ?? 0).toFixed(1)}%) -{" "}
-                  <span className={p.attendance?.qualified ? "qualified" : "not-qualified"}>
+                  <span
+                    className={
+                      p.attendance?.qualified ? "qualified" : "not-qualified"
+                    }
+                  >
                     {p.attendance?.qualified ? "Qualified" : "Not Qualified"}
                   </span>
                 </span>
@@ -83,12 +87,16 @@ export default function AdminStudentPerformance() {
 
               <div className="row">
                 <span>1st Term:</span>
-                <span>{p.marks?.firstTerm ?? 0} | Points: {p.points?.firstTerm ?? 0}/10</span>
+                <span>
+                  {p.marks?.firstTerm ?? 0} | Points: {p.points?.firstTerm ?? 0}/10
+                </span>
               </div>
 
               <div className="row">
                 <span>2nd Term:</span>
-                <span>{p.marks?.secondTerm ?? 0} | Points: {p.points?.secondTerm ?? 0}/10</span>
+                <span>
+                  {p.marks?.secondTerm ?? 0} | Points: {p.points?.secondTerm ?? 0}/10
+                </span>
               </div>
 
               <div className="row assignments">
