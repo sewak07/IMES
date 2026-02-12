@@ -339,3 +339,79 @@ export const updateMarks = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+//password change
+export const changeTeacherPassword = async (req, res) => {
+  try {
+    const { email, oldPassword, newPassword } = req.body;
+
+    // Validation
+    if (!email || !oldPassword || !newPassword) {
+      return res.status(400).json({ 
+        success: false,
+        message: "All fields are required" 
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ 
+        success: false,
+        message: "New password must be at least 6 characters long" 
+      });
+    }
+
+    // Find teacher
+    const teacher = await Teacher.findById(req.user.id);
+    if (!teacher) {
+      return res.status(404).json({ 
+        success: false,
+        message: "Teacher not found" 
+      });
+    }
+
+    // Verify email matches
+    if (teacher.email !== email) {
+      return res.status(403).json({ 
+        success: false,
+        message: "Email does not match" 
+      });
+    }
+
+    // Verify old password
+    const isMatch = await bcrypt.compare(oldPassword, teacher.password);
+    if (!isMatch) {
+      return res.status(401).json({ 
+        success: false,
+        message: "Old password is incorrect" 
+      });
+    }
+
+    // Check if new password is same as old
+    const isSameAsOld = await bcrypt.compare(newPassword, teacher.password);
+    if (isSameAsOld) {
+      return res.status(400).json({ 
+        success: false,
+        message: "New password cannot be the same as old password" 
+      });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    teacher.password = await bcrypt.hash(newPassword, salt);
+
+    await teacher.save();
+
+    res.json({ 
+      success: true,
+      message: "Password changed successfully" 
+    });
+
+  } catch (error) {
+    console.error("Change password error:", error);
+    res.status(500).json({ 
+      success: false,
+      message: "Server error" 
+    });
+  }
+};

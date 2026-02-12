@@ -64,3 +64,15 @@ export const setPassword = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 }
+
+// logout controller
+export const logout = async (req, res) => {
+  try {
+    res.json({ message: "Logout successful. Please remove token on client side." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+

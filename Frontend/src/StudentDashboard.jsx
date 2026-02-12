@@ -433,7 +433,7 @@ export default function StudentDashboard() {
           <p>
             Designed with ❤️ by{" "}
             <a
-              href="https://yourportfolio1.com"
+              href="https://sewak07.github.io/portfolio/"
               target="_blank"
               rel="noopener noreferrer"
             >

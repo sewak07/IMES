@@ -275,7 +275,6 @@ export const getStudentPerformanceJSON = async (req, res) => {
 
     const performance = student.attendance.map((att) => {
       const mark = student.marks.find((m) => m.subject === att.subject) || {};
-
       const attendance = calculateAttendance(att.attendedDays, att.totalDays);
 
       const firstTermPoints = marksToPoints(mark.internal || 0);
@@ -283,7 +282,12 @@ export const getStudentPerformanceJSON = async (req, res) => {
 
       return {
         subject: att.subject,
-        attendance,
+        attendance: {
+          attendedDays: att.attendedDays,
+          totalDays: att.totalDays,
+          percentage: attendance.percentage,
+          qualified: attendance.qualified
+        },
         attendanceMarks: attendance.marks,
         marks: {
           firstTerm: mark.internal || 0,
@@ -310,6 +314,7 @@ export const getStudentPerformanceJSON = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch performance" });
   }
 };
+
 
 
 // ---------------------- Change Admin Password ----------------------
