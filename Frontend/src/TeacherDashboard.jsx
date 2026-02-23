@@ -137,6 +137,7 @@ export default function TeacherDashboard() {
       <div className={styles.topBar}>
         <h2>{welcome}</h2>
         
+        
         {/* Top Right Icons */}
         <div className={styles.dashboardHeaderTop}>
           <div
@@ -197,7 +198,7 @@ export default function TeacherDashboard() {
               <ul className={styles.subjectList}>
                 {subjects.map((s, i) => (
                   <li key={i} className={styles.subjectItem}>
-                    <strong>{s.name}</strong> <span>Semester {s.semester}</span>
+                    <strong>{s.name}</strong> <span>Semester {s.semester}</span> <span>{s.faculty}</span>
                   </li>
                 ))}
               </ul>
@@ -225,10 +226,10 @@ export default function TeacherDashboard() {
               >
                 <option value="">-- Program --</option>
                 <option value="BCA">BCA</option>
-                <option value="CSIT">CSIT</option>
+                <option value="BSc CSIT">BSc CSIT</option>
                 <option value="BBA">BBA</option>
                 <option value="BIM">BIM</option>
-                <option value="BSC">BSC</option>
+                
               </select>
             </div>
 

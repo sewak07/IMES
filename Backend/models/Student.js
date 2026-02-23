@@ -8,6 +8,7 @@ const attendanceSchema = new mongoose.Schema({
   marks: { type: Number, default: 0 },
   qualified: { type: Boolean, default: true }
 });
+
 const marksSchema = new mongoose.Schema({
   subject: { type: String, required: true },
   semester: { type: Number, required: true },

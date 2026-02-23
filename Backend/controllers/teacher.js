@@ -42,18 +42,18 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
       return res.status(404).json({ message: "Teacher not found" });
     }
 
-    // Teacher must teach at least one subject in this semester
-    const allowed = teacher.subjects.some(
-      s => Number(s.semester) === semester
+    // Filter teacher subjects for this semester AND faculty
+    const allowedSubjects = teacher.subjects.filter(
+      s =>
+        Number(s.semester) === semester &&
+        s.faculty.trim().toLowerCase() === faculty.toLowerCase()
     );
 
-    if (!allowed) {
-      return res
-        .status(403)
-        .json({ message: "Not allowed to access this semester" });
+    if (allowedSubjects.length === 0) {
+      return res.status(403).json({ message: "Not allowed to access this semester/faculty" });
     }
 
-    // ✅ CASE-INSENSITIVE FACULTY MATCH
+    // Fetch students of the same semester AND faculty
     const students = await Student.find({
       semester,
       faculty: { $regex: `^${faculty}$`, $options: "i" }
@@ -61,14 +61,11 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
       .sort({ username: 1 })
       .select("username email semester faculty attendance marks");
 
-    const subjectsOfSemester = teacher.subjects.filter(
-      s => Number(s.semester) === semester
-    );
-
+    // Initialize attendance only for subjects the teacher teaches
     const studentsWithAttendance = students.map(student => {
       const updatedAttendance = [...(student.attendance || [])];
 
-      subjectsOfSemester.forEach(sub => {
+      allowedSubjects.forEach(sub => {
         if (!updatedAttendance.some(a => a.subject === sub.name)) {
           updatedAttendance.push({
             subject: sub.name,
@@ -76,7 +73,8 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
             attendedDays: 0,
             totalDays: 0,
             percentage: 0,
-            marks: 0
+            marks: 0,
+            qualified: true
           });
         }
       });
@@ -97,26 +95,38 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
 
 
 // Update attendance with grading
+// Update attendance with grading
 export const updateAttendance = async (req, res) => {
   try {
     const { studentId, subject, semester, present } = req.body;
+
     if (!studentId || !subject || semester === undefined) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+    // Fetch teacher
     const teacher = await Teacher.findById(req.user.id);
     if (!teacher) return res.status(404).json({ message: "Teacher not found" });
 
-    const allowed = teacher.subjects.some(
-      s => s.name === subject && Number(s.semester) === Number(semester)
-    );
-    if (!allowed) return res.status(403).json({ message: "Not allowed to mark attendance" });
-
+    // Fetch student
     const student = await Student.findById(studentId);
     if (!student) return res.status(404).json({ message: "Student not found" });
 
+    // Check if teacher is allowed to mark attendance for this student's faculty and semester
+    const allowed = teacher.subjects.some(
+      s =>
+        s.name.trim().toLowerCase() === subject.trim().toLowerCase() &&
+        Number(s.semester) === Number(semester) &&
+        s.faculty.trim().toLowerCase() === student.faculty.trim().toLowerCase()
+    );
+    if (!allowed) {
+      return res.status(403).json({ message: "Not allowed to mark attendance for this student" });
+    }
+
+    // Ensure attendance array exists
     if (!Array.isArray(student.attendance)) student.attendance = [];
 
+    // Find or create attendance record for this subject
     let attendance = student.attendance.find(a => a.subject === subject);
     if (!attendance) {
       attendance = {
@@ -130,54 +140,38 @@ export const updateAttendance = async (req, res) => {
       student.attendance.push(attendance);
     }
 
-  
+    // Update attendance
     attendance.totalDays += 1;
     if (present) attendance.attendedDays += 1;
-
-  
-    attendance.percentage =
-      (attendance.attendedDays / attendance.totalDays) * 100;
+    attendance.percentage = (attendance.attendedDays / attendance.totalDays) * 100;
 
     const absentDays = attendance.totalDays - attendance.attendedDays;
 
+    // Calculate marks and qualification
     if (attendance.percentage < 80) {
       attendance.qualified = false;
-      attendance.marks = null; // NQ
+      attendance.marks = null;
     } else {
       attendance.qualified = true;
-
       if (absentDays <= 5) attendance.marks = 10;
       else if (absentDays <= 10) attendance.marks = 8;
       else if (absentDays <= 15) attendance.marks = 6;
       else if (absentDays <= 20) attendance.marks = 4;
       else {
         attendance.qualified = false;
-        attendance.marks = null; 
+        attendance.marks = null;
       }
     }
-
-
-    // Update total marks
-    // const mark = student.marks.find(m => m.subject === subject);
-    // if (mark) {
-    //   mark.total =
-    //     attendance.marks +
-    //     mark.assignment +
-    //     mark.labReport +
-    //     mark.practical +
-    //     mark.viva;
-    // }
 
     await student.save();
 
     res.json({ message: "Attendance marked", attendance });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 const marksToPoints = (marks) => {
   const m = Number(marks);
@@ -191,7 +185,7 @@ const marksToPoints = (marks) => {
   if (m >= 21 && m <= 25) return 3;
   if (m >= 16 && m <= 20) return 2;
   if (m >= 1 && m <= 15) return 1;
-  return 0; 
+  return 0;
 };
 
 const lockAssignment = (oldValue, oldSubmitted, newValue) => {
@@ -285,7 +279,7 @@ export const updateMarks = async (req, res) => {
       mark.internal = internal;
       mark.midTerm = midTerm;
 
-      // 🔒 Assignment lock enforcement
+      //  Assignment lock enforcement
       const a1 = lockAssignment(
         mark.assignment1,
         mark.assignment1Submitted,
@@ -348,51 +342,51 @@ export const changeTeacherPassword = async (req, res) => {
 
     // Validation
     if (!email || !oldPassword || !newPassword) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "All fields are required" 
+        message: "All fields are required"
       });
     }
 
     if (newPassword.length < 6) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "New password must be at least 6 characters long" 
+        message: "New password must be at least 6 characters long"
       });
     }
 
     // Find teacher
     const teacher = await Teacher.findById(req.user.id);
     if (!teacher) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: "Teacher not found" 
+        message: "Teacher not found"
       });
     }
 
     // Verify email matches
     if (teacher.email !== email) {
-      return res.status(403).json({ 
+      return res.status(403).json({
         success: false,
-        message: "Email does not match" 
+        message: "Email does not match"
       });
     }
 
     // Verify old password
     const isMatch = await bcrypt.compare(oldPassword, teacher.password);
     if (!isMatch) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        message: "Old password is incorrect" 
+        message: "Old password is incorrect"
       });
     }
 
     // Check if new password is same as old
     const isSameAsOld = await bcrypt.compare(newPassword, teacher.password);
     if (isSameAsOld) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "New password cannot be the same as old password" 
+        message: "New password cannot be the same as old password"
       });
     }
 
@@ -402,16 +396,16 @@ export const changeTeacherPassword = async (req, res) => {
 
     await teacher.save();
 
-    res.json({ 
+    res.json({
       success: true,
-      message: "Password changed successfully" 
+      message: "Password changed successfully"
     });
 
   } catch (error) {
     console.error("Change password error:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: "Server error" 
+      message: "Server error"
     });
   }
 };

@@ -1,0 +1,695 @@
+.studentDashboard {
+  font-family: Inter, system-ui, sans-serif;
+  min-height: 100vh;
+  color: #0f172a;
+  transition: background 0.3s ease; 
+  background-color: #f3f4f6;
+  overflow-x: hidden;
+  
+}
+
+/* TOP BAR */
+.studentDashboard .sdTopbar {
+  padding: 16px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.studentDashboard .sdLogo {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.studentDashboard .sdUser {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.studentDashboard .sdUser span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.studentDashboard .sdAvatar {
+  width: 38px;
+  height: 38px;
+  background: #2563eb;
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.studentDashboard .sdAvatar:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+/* HEADER */
+.studentDashboard .sdHeader {
+  padding: 32px 28px 16px;
+}
+
+.studentDashboard .sdHeader h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.studentDashboard .sdHeader p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* STATS */
+.studentDashboard .sdStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 0 28px 32px;
+}
+
+.studentDashboard .sdStat {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.studentDashboard .sdStat h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.studentDashboard .sdStat p {
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* SUBJECTS */
+.studentDashboard .sdSectionTitle {
+  padding: 0 28px;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.studentDashboard .sdSubjects {
+  padding: 0 28px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media screen and (max-width: 1024px) {
+  .studentDashboard .sdSubjects {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .studentDashboard .sdSubjects {
+    grid-template-columns: 1fr;
+    padding: 0 16px 24px;
+    gap: 16px;
+  }
+}
+
+.sdStatContent {
+  display: flex;
+  align-items: center;       
+  justify-content: center;   
+  gap: 12px;                 
+  height: 100%;              
+}
+
+.sdStatIcon {
+  background-color: #dfe8f0;
+  display: flex;
+  padding: 8px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;            
+}
+
+.sdStatText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   
+  align-items: flex-start;  
+}
+
+.sdStatText h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.sdStatText p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+
+/* CARD */
+.studentDashboard .sdCard {
+  background: #e3fbec;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-left: 3px solid #0d6c30;
+}
+
+.studentDashboard .sdCard strong {
+  color: #0d6c30;
+}
+
+.studentDashboard .sdCard:hover strong {
+  color: #16a34a;
+  transition: color 0.3s ease-in-out;
+}
+
+.studentDashboard .sdCard:hover {
+  transform: translateY(-6px) scale(1.02);
+  border: 2.5px solid #16a34a;
+}
+
+.studentDashboard .sdCard h3 {
+  color: #0d6c30;
+}
+
+/* CARD HEADER */
+.studentDashboard .sdCardHeader {
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  transition: background 0.2s ease;
+}
+
+.studentDashboard .sdCode {
+  font-size: 12px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.studentDashboard .sdCircle {
+  text-align: center;
+  color: #16a34a;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.studentDashboard .sdCircle small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* CARD BODY */
+.studentDashboard .sdCardBody {
+  padding: 14px;
+  border-top: 1px solid #e5e7eb;
+  transition: all 0.3s ease-in-out;
+}
+
+.studentDashboard .sdCard:hover .sdCardBody {
+  border-top: 1px solid #16a34a;
+}
+
+.studentDashboard .sdBlock {
+  margin-bottom: 12px;
+}
+
+.studentDashboard .sdRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.studentDashboard .sdRow span {
+  margin-bottom: 4px;
+}
+
+.studentDashboard .sdTotal {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  padding-top: 8px;
+  border-top: 1.5px dashed #cbd5f5;
+  font-size: 14px;
+  transition: all 0.3s ease-in-out;
+  color: #0d6c30;
+}
+
+.studentDashboard .sdCard:hover .sdTotal {
+  border-top: 1.5px dashed #16a34a;
+}
+
+/* -------------------- NQ CARD STYLING -------------------- */
+.studentDashboard .sdCard.nqCard h3 {
+  color: #b91c1c;
+}
+
+.studentDashboard .sdCard.nqCard .sdCircle {
+  color: #b91c1c;
+}
+
+.studentDashboard .sdCard .sdCardHeader .nqBadge {
+  color: #b91c1c;
+}
+
+.studentDashboard .sdCard.nqCard {
+  border-left: 3px solid #b91c1c;
+  background-color: #feebec;
+}
+
+.studentDashboard .nqCard strong {
+  color: #b91c1c;
+}
+
+
+/* -------------------- NQ CARD HOVER OVERRIDE -------------------- */
+.studentDashboard .sdCard.nqCard:hover {
+  transform: translateY(-6px) scale(1.02);
+  border: 2.5px solid #ff4d4f;
+}
+
+.studentDashboard .sdCard.nqCard:hover strong {
+  color: #ff4d4f;
+  transition: color 0.3s ease-in-out;
+}
+
+.studentDashboard .sdCard.nqCard:hover .nqBadge {
+  color: #ff4d4f;
+}
+
+.studentDashboard .sdCard.nqCard .sdTotal {
+  color: #b91c1c;
+}
+
+.studentDashboard .sdCard.nqCard:hover .sdTotal {
+  border-top: 1.5px dashed #ff4d4f;
+}
+
+.studentDashboard .sdCard.nqCard:hover .sdCardBody {
+  border-top: 1px solid #ff4d4f;
+}
+
+
+/* LOADING */
+.studentDashboard .sdLoading {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  font-size: 16px;
+  color: #64748b;
+}
+
+/* BUTTONS */
+.changePwdBtn {
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.changePwdBtn:hover {
+  background: #1d4ed8;
+  transform: scale(1.05);
+}
+
+/* MODAL */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: white;
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 360px;
+  transition: all 0.3s ease-in-out;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  transition: all 0.3s ease-in-out;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modalActions button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.modalActions button:first-child {
+  background: #16a34a;
+  color: white;
+}
+
+.modalActions button:first-child:hover {
+  background: #15803d;
+  transform: scale(1.03);
+}
+
+.modalActions button:last-child {
+  background: #e5e7eb;
+}
+
+.modalActions button:last-child:hover {
+  background: #d1d5db;
+  transform: scale(1.03);
+}
+
+/* USER MENU */
+.userMenu {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #f2f2f2;
+  border: none;
+  box-shadow: 0 1px 15px rgba(177, 176, 176, 0.3);
+  border-radius: 8px;
+  width: 180px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.userMenu button {
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: none;
+  color: black;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.userMenu button:hover {
+  background: #d2d6db;
+}
+
+.logoutBtn {
+  color: #f87171;
+}
+
+/* FOOTER */
+.sdFooter {
+  margin-top: 40px;
+  padding: 20px 16px;
+  background-color: #f3f4f6;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #374151;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+}
+
+.footerLine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.footerLine a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+.footerLine a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+  transform: scale(1.02);
+}
+
+
+.footerLink {
+  color: #2563eb;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.footerLink:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* About/Privacy Modal Overlay */
+.infoModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* About/Privacy Modal Box */
+.infoModal {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 25px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+/* Modal Headings */
+.infoModal h2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  color: #222;
+}
+
+.infoModal h3 {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Modal Paragraphs */
+.infoModal p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Modal Actions */
+.infoModalActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.infoModalActions button {
+  padding: 8px 18px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.infoModalActions button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Analytics */
+/* Analytics Container */
+.analyticsContainer {
+  padding: 0 28px 40px;
+}
+
+/* Header Section */
+.analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.analyticsHeader h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.termSelect {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* Grid Layout */
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+  
+/* Individual Card */
+.analyticsCard {
+  background: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.analyticsCard h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+/* Chart Wrapper */
+.chartWrapper {
+  flex: 1;
+  height: 100%;
+  min-height: 240px;
+}
+
+/* No Data / Error Message */
+.analyticsMessage {
+  padding: 20px;
+  text-align: center;
+  color: #555;
+}
+
+.analyticsError {
+  padding: 20px;
+  text-align: center;
+  color: red;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 10px; 
+  }
+
+  .analyticsCard {
+    height: auto;
+    max-width: 95%;        
+    margin-left: 10px;     
+    box-sizing: border-box;
+    padding: 20px;
+  }
+
+  .chartWrapper {
+    min-height: 200px;
+  }
+
+  .analyticsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .termSelect {
+    width: 100%;
+  }
+}
+
+
+.inlineProgressContainer {
+  flex: 1; /* takes remaining space */
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  margin: 0 8px; /* spacing between label and score */
+  overflow: hidden;
+  align-self: center;
+}
+
+.inlineProgressFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease, background-color 0.3s ease;
+}
+
+
+

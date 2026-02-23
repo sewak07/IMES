@@ -7,7 +7,7 @@ import SearchBox from "./SearchBox";
 export default function StudentLists() {
   const [students, setStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(5);
+  const [studentsPerPage] = useState(500);
   const [editingId, setEditingId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [searchTerm, setSearchTerm] = useState("");

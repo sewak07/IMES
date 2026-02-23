@@ -109,6 +109,46 @@
   background: #e0556b;
 }
 
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pagination button {
+  background-color: #6a5af9;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 40px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #5848d9;
+  transform: translateY(-1px);
+}
+
+.pagination button[style*="bold"] {
+  background-color: #4caf50;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+
 /* --------------------
   Mobile Styles (Cards)
 -------------------- */
@@ -157,4 +197,11 @@
   .actionButton {
     margin: 5px 5px 0 0;
   }
+
+   .pagination button {
+    padding: 8px 12px;
+    margin: 2px;
+    font-size: 13px;
+  }
 }
+

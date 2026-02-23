@@ -36,22 +36,52 @@ export const addStudent = async (req, res) => {
 export const addTeacher = async (req, res) => {
   try {
     const { email, username, password, subjects } = req.body;
-    if (!email || !username) return res.status(400).json({ message: "Email & username required" });
+
+    if (!email || !username) {
+      return res.status(400).json({ message: "Email & username required" });
+    }
 
     const exists = await Teacher.findOne({ email });
     if (exists) return res.status(400).json({ message: "Teacher already exists" });
+
+    // Format subjects first
+    const formattedSubjects = Array.isArray(subjects)
+      ? subjects
+        .filter(s => s.name && s.semester !== undefined && s.faculty)
+        .map(s => ({
+          name: s.name.trim(),
+          semester: Number(s.semester),
+          faculty: s.faculty.trim()
+        }))
+      : [];
+
+    // Check for duplicate subject + faculty
+    for (const s of formattedSubjects) {
+      const conflict = await Teacher.findOne({
+        "subjects.name": s.name,
+        "subjects.faculty": s.faculty
+      });
+      if (conflict) {
+        return res.status(400).json({
+          message: `Subject "${s.name}" is already assigned in "${s.faculty}"`
+        });
+      }
+    }
 
     const teacher = new Teacher({
       email,
       username,
       password: password ? await hash(password) : undefined,
-      subjects: Array.isArray(subjects)
-        ? subjects.map(s => ({ name: s.name?.trim(), semester: Number(s.semester) || null }))
-        : []
+      subjects: formattedSubjects
     });
 
     await teacher.save();
-    res.status(201).json({ message: "Teacher created", teacherId: teacher._id });
+
+    res.status(201).json({
+      message: "Teacher created successfully",
+      teacherId: teacher._id
+    });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
@@ -121,11 +151,29 @@ export const updateTeacher = async (req, res) => {
     if (password) teacher.password = await hash(password);
 
     if (Array.isArray(subjects)) {
-      teacher.subjects = [];
-      for (const s of subjects) {
-        if (!s.name) continue;
-        teacher.subjects.push({ name: s.name.trim(), semester: Number(s.semester) || null });
+      const formattedSubjects = subjects
+        .filter(s => s.name && s.semester !== undefined && s.faculty)
+        .map(s => ({
+          name: s.name.trim(),
+          semester: Number(s.semester),
+          faculty: s.faculty.trim()
+        }));
+
+      // Check for conflicts excluding current teacher
+      for (const s of formattedSubjects) {
+        const conflict = await Teacher.findOne({
+          _id: { $ne: teacher._id },
+          "subjects.name": s.name,
+          "subjects.faculty": s.faculty
+        });
+        if (conflict) {
+          return res.status(400).json({
+            message: `Subject "${s.name}" is already assigned in "${s.faculty}"`
+          });
+        }
       }
+
+      teacher.subjects = formattedSubjects;
     }
 
     await teacher.save();
@@ -202,8 +250,7 @@ const toCSV = (rows) => {
   ].join("\n");
 };
 
-// ---------------------- Add / Update / Delete Students & Teachers ----------------------
-// (Same as previous code, omitted for brevity; keep your existing CRUD code here)
+
 
 // ---------------------- Download Student Performance ----------------------
 export const downloadStudentPerformance = async (req, res) => {

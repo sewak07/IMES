@@ -48,10 +48,10 @@ export default function AddStudent() {
          <select name="faculty" value={form.faculty} onChange={handleChange} required >
           <option value="">Select Program</option>
           <option value="BCA">BCA</option>
-          <option value="CSIT">CSIT</option>
+          <option value="CSIT">BSc CSIT</option>
           <option value="BIM">BIM</option>
           <option value="BBA">BBA</option>
-          <option value="BSC">BSC</option>
+          
         </select>
         <button type="submit">Add Student</button>
       </form>

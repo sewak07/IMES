@@ -7,8 +7,14 @@ export default function DownloadReports() {
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState("");
   const [faculty, setFaculty] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 500; 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
   const fetchStudents = async () => {
     try {
@@ -22,10 +28,6 @@ export default function DownloadReports() {
     }
   };
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
   const filtered = students.filter((s) => {
     const q = search.toLowerCase();
     return (
@@ -33,6 +35,12 @@ export default function DownloadReports() {
       (faculty ? s.faculty.toLowerCase() === faculty.toLowerCase() : true)
     );
   });
+
+  // Pagination
+  const totalPages = Math.ceil(filtered.length / studentsPerPage);
+  const indexOfLast = currentPage * studentsPerPage;
+  const indexOfFirst = indexOfLast - studentsPerPage;
+  const currentStudents = filtered.slice(indexOfFirst, indexOfLast);
 
   const download = async (id, username) => {
     try {
@@ -87,7 +95,7 @@ export default function DownloadReports() {
           </tr>
         </thead>
         <tbody>
-          {filtered.map((s) => (
+          {currentStudents.map((s) => (
             <tr key={s._id}>
               <td data-label="Name">{s.username}</td>
               <td data-label="Email">{s.email}</td>
@@ -109,8 +117,25 @@ export default function DownloadReports() {
               </td>
             </tr>
           ))}
+          {currentStudents.length === 0 && (
+            <tr>
+              <td colSpan="5" style={{ textAlign: "center" }}>
+                No students found
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
+
+     {totalPages > 1 && (
+        <div className="pagination">
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
+          {[...Array(totalPages)].map((_, i) => (
+            <button key={i} onClick={() => setCurrentPage(i + 1)} style={{ fontWeight: currentPage === i + 1 ? "bold" : "normal" }}>{i + 1}</button>
+          ))}
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        </div>
+      )}
     </div>
   );
 }

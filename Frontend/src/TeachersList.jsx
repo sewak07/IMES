@@ -6,7 +6,7 @@ import "./TeacherLists.css";
 export default function TeachersLists() {
   const [teachers, setTeachers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [teachersPerPage] = useState(5);
+  const [teachersPerPage] = useState(100);
   const [editingId, setEditingId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,7 +23,6 @@ export default function TeachersLists() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTeachers(res.data.teachers || []);
-      fetchTeachers();
     } catch (err) {
       console.log("Error fetching teachers:", err);
     }
@@ -34,7 +33,7 @@ export default function TeachersLists() {
     setEditedData({
       username: teacher.username,
       email: teacher.email,
-      subjects: teacher.subjects.map(s => ({ ...s })),
+      subjects: teacher.subjects.map((s) => ({ ...s })),
     });
   };
 
@@ -43,6 +42,7 @@ export default function TeachersLists() {
       const newSubjects = [...editedData.subjects];
       if (value.name !== undefined) newSubjects[index].name = value.name;
       if (value.semester !== undefined) newSubjects[index].semester = value.semester;
+      if (value.faculty !== undefined) newSubjects[index].faculty = value.faculty;
       setEditedData({ ...editedData, subjects: newSubjects });
     } else {
       setEditedData({ ...editedData, [field]: value });
@@ -50,7 +50,10 @@ export default function TeachersLists() {
   };
 
   const addNewSubject = () => {
-    const newSubjects = [...(editedData.subjects || []), { name: "", semester: "" }];
+    const newSubjects = [
+      ...(editedData.subjects || []),
+      { name: "", semester: "", faculty: "" },
+    ];
     setEditedData({ ...editedData, subjects: newSubjects });
   };
 
@@ -63,7 +66,14 @@ export default function TeachersLists() {
     try {
       const dataToSend = {
         ...editedData,
-        subjects: editedData.subjects.filter(s => s.name && s.name.trim() !== "")
+        subjects: editedData.subjects.filter(
+          (s) =>
+            s.name &&
+            s.name.trim() !== "" &&
+            s.semester &&
+            s.faculty &&
+            s.faculty.trim() !== ""
+        ),
       };
       await axios.put(`http://localhost:9001/api/admin/teacher/${id}`, dataToSend, {
         headers: { Authorization: `Bearer ${token}` },
@@ -88,9 +98,10 @@ export default function TeachersLists() {
     }
   };
 
-  const filteredTeachers = teachers.filter(t =>
-    t.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTeachers = teachers.filter(
+    (t) =>
+      t.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const indexOfLastTeacher = currentPage * teachersPerPage;
@@ -103,7 +114,10 @@ export default function TeachersLists() {
       <h3>All Teachers</h3>
       <SearchBox
         value={searchTerm}
-        onChange={value => { setSearchTerm(value); setCurrentPage(1); }}
+        onChange={(value) => {
+          setSearchTerm(value);
+          setCurrentPage(1);
+        }}
         placeholder="Search by name or email..."
       />
       <table>
@@ -118,28 +132,34 @@ export default function TeachersLists() {
         <tbody>
           {currentTeachers.length === 0 ? (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center" }}>No teachers found</td>
+              <td colSpan="4" style={{ textAlign: "center" }}>
+                No teachers found
+              </td>
             </tr>
           ) : (
-            currentTeachers.map(t => (
+            currentTeachers.map((t) => (
               <tr key={t._id}>
                 <td style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === t._id ? (
                     <input
                       type="text"
                       value={editedData.username}
-                      onChange={e => handleInputChange("username", e.target.value)}
+                      onChange={(e) => handleInputChange("username", e.target.value)}
                     />
-                  ) : t.username}
+                  ) : (
+                    t.username
+                  )}
                 </td>
                 <td style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === t._id ? (
                     <input
                       type="email"
                       value={editedData.email}
-                      onChange={e => handleInputChange("email", e.target.value)}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
                     />
-                  ) : t.email}
+                  ) : (
+                    t.email
+                  )}
                 </td>
                 <td style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
                   {editingId === t._id ? (
@@ -150,21 +170,54 @@ export default function TeachersLists() {
                             type="text"
                             placeholder="Subject Name"
                             value={s.name}
-                            onChange={e => handleInputChange("subjects", { name: e.target.value }, i)}
+                            onChange={(e) =>
+                              handleInputChange("subjects", { name: e.target.value }, i)
+                            }
                           />
-                          <input
-                            type="text"
-                            placeholder="Semester"
-                            value={s.semester}
-                            onChange={e => handleInputChange("subjects", { semester: e.target.value }, i)}
-                          />
-                          <button onClick={() => removeSubject(i)}>Remove</button>
+                          <select
+                            value={s.semester || ""}
+                            onChange={(e) =>
+                              handleInputChange("subjects", { semester: e.target.value }, i)
+                            }
+                          >
+                            <option value="">Select Semester</option>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                              <option key={n} value={n}>
+                                {n} Semester
+                              </option>
+                            ))}
+                          </select>
+                          <select
+                            value={s.faculty || ""}
+                            onChange={(e) =>
+                              handleInputChange("subjects", { faculty: e.target.value }, i)
+                            }
+                          >
+                            <option value="">Select Program</option>
+                            {["BCA", "BSc CSIT", "BIM", "BBA"].map((p) => (
+                              <option key={p} value={p}>
+                                {p}
+                              </option>
+                            ))}
+                          </select>
+                          <button type="button" onClick={() => removeSubject(i)}>
+                            Remove
+                          </button>
                         </div>
                       ))}
-                      <button onClick={addNewSubject}>+ Add Subject</button>
+                      <button type="button" onClick={addNewSubject}>
+                        + Add Subject
+                      </button>
                     </div>
+                  ) : t.subjects.length > 0 ? (
+                    t.subjects
+                      .map(
+                        (s) =>
+                          `${s.name} (Sem: ${s.semester || "N/A"}) - ${s.faculty || "N/A"}`
+                      )
+                      .join(", ")
                   ) : (
-                    t.subjects.length > 0 ? t.subjects.map(s => `${s.name} (Sem: ${s.semester || "N/A"})`).join(", ") : "No subjects"
+                    "No subjects"
                   )}
                 </td>
                 <td>
@@ -187,12 +240,28 @@ export default function TeachersLists() {
       </table>
 
       {totalPages > 1 && (
-        <div>
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
+        <div className="pagination">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Prev
+          </button>
           {[...Array(totalPages)].map((_, i) => (
-            <button key={i} onClick={() => setCurrentPage(i + 1)} style={{ fontWeight: currentPage === i + 1 ? "bold" : "normal" }}>{i + 1}</button>
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              style={{ fontWeight: currentPage === i + 1 ? "bold" : "normal" }}
+            >
+              {i + 1}
+            </button>
           ))}
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
         </div>
       )}
     </div>

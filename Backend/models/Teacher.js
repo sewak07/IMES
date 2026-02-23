@@ -16,6 +16,7 @@ const teacherSchema = new mongoose.Schema({
   subjects: [{
     name:String,
     semester:Number,
+    faculty: String 
   }],
 });
 
