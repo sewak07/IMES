@@ -29,7 +29,7 @@ export default function Stats({ performance, student }) {
       <div className={styles.sdHeader}>
         <h1>Performance Dashboard</h1>
         <p>
-          {student.faculty || "Program"} · Semester {student.semester}
+          Semester {student.semester}
         </p>
       </div>
 

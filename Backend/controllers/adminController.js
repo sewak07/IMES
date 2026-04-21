@@ -25,7 +25,7 @@ export const addStudent = async (req, res) => {
     });
 
     await student.save();
-    res.status(201).json({ message: "Student created", studentId: student._id });
+    res.status(201).json({ message: "Student created successfully", studentId: student._id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
@@ -44,30 +44,30 @@ export const addTeacher = async (req, res) => {
     const exists = await Teacher.findOne({ email });
     if (exists) return res.status(400).json({ message: "Teacher already exists" });
 
-    // Format subjects first
+    // Format subjects
     const formattedSubjects = Array.isArray(subjects)
       ? subjects
-        .filter(s => s.name && s.semester !== undefined && s.faculty)
-        .map(s => ({
-          name: s.name.trim(),
-          semester: Number(s.semester),
-          faculty: s.faculty.trim()
-        }))
+          .filter(s => s.name && s.semester !== undefined && s.faculty)
+          .map(s => ({
+            name: s.name.trim(),
+            semester: Number(s.semester),
+            faculty: s.faculty.trim()
+          }))
       : [];
 
-    // Check for duplicate subject + faculty
+    // Prevent duplicate subjects within this teacher only
+    const seen = new Set();
     for (const s of formattedSubjects) {
-      const conflict = await Teacher.findOne({
-        "subjects.name": s.name,
-        "subjects.faculty": s.faculty
-      });
-      if (conflict) {
+      const key = `${s.name}-${s.semester}-${s.faculty}`;
+      if (seen.has(key)) {
         return res.status(400).json({
-          message: `Subject "${s.name}" is already assigned in "${s.faculty}"`
+          message: `Duplicate subject "${s.name}" in semester ${s.semester}, faculty "${s.faculty}" for this teacher`
         });
       }
+      seen.add(key);
     }
 
+    // Create teacher
     const teacher = new Teacher({
       email,
       username,
@@ -81,7 +81,6 @@ export const addTeacher = async (req, res) => {
       message: "Teacher created successfully",
       teacherId: teacher._id
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
@@ -159,21 +158,19 @@ export const updateTeacher = async (req, res) => {
           faculty: s.faculty.trim()
         }));
 
-      // Check for conflicts excluding current teacher
+      // ✅ Prevent duplicates within the same teacher only
+      const seen = new Set();
       for (const s of formattedSubjects) {
-        const conflict = await Teacher.findOne({
-          _id: { $ne: teacher._id },
-          "subjects.name": s.name,
-          "subjects.faculty": s.faculty
-        });
-        if (conflict) {
+        const key = `${s.name}-${s.semester}-${s.faculty}`;
+        if (seen.has(key)) {
           return res.status(400).json({
-            message: `Subject "${s.name}" is already assigned in "${s.faculty}"`
+            message: `Duplicate subject "${s.name}" in semester ${s.semester}, faculty "${s.faculty}" for this teacher`
           });
         }
+        seen.add(key);
       }
 
-      teacher.subjects = formattedSubjects;
+      teacher.subjects = formattedSubjects; 
     }
 
     await teacher.save();

@@ -62,11 +62,16 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
       .select("username email semester faculty attendance marks");
 
     // Initialize attendance only for subjects the teacher teaches
-    const studentsWithAttendance = students.map(student => {
+    const studentsWithAttendance = [];
+
+    for (const student of students) {
+      let changed = false;
       const updatedAttendance = [...(student.attendance || [])];
 
       allowedSubjects.forEach(sub => {
-        if (!updatedAttendance.some(a => a.subject === sub.name)) {
+        if (!updatedAttendance.some(
+          a => a.subject.trim().toLowerCase() === sub.name.trim().toLowerCase()
+        )) {
           updatedAttendance.push({
             subject: sub.name,
             semester: sub.semester,
@@ -76,14 +81,18 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
             marks: 0,
             qualified: true
           });
+          changed = true;
         }
       });
 
-      return {
-        ...student.toObject(),
-        attendance: updatedAttendance
-      };
-    });
+      if (changed) {
+        student.attendance = updatedAttendance;
+        await student.save(); 
+      }
+
+      studentsWithAttendance.push(student.toObject());
+    }
+
 
     res.json({ students: studentsWithAttendance });
 
@@ -93,8 +102,6 @@ export const getStudentsByFacultyAndSemester = async (req, res) => {
   }
 };
 
-
-// Update attendance with grading
 // Update attendance with grading
 export const updateAttendance = async (req, res) => {
   try {

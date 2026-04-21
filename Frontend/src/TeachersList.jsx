@@ -23,6 +23,7 @@ export default function TeachersLists() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTeachers(res.data.teachers || []);
+      fetchTeachers();
     } catch (err) {
       console.log("Error fetching teachers:", err);
     }
@@ -210,15 +211,20 @@ export default function TeachersLists() {
                       </button>
                     </div>
                   ) : t.subjects.length > 0 ? (
-                    t.subjects
-                      .map(
-                        (s) =>
-                          `${s.name} (Sem: ${s.semester || "N/A"}) - ${s.faculty || "N/A"}`
-                      )
-                      .join(", ")
+                    <div className="subject-list">
+                      {t.subjects.map((s, i) => (
+                        <span key={i} className="subject-chip">
+                          <strong>{s.name}</strong>
+                          <span className="subject-meta">
+                            Sem {s.semester || "N/A"} · {s.faculty || "N/A"}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
                   ) : (
                     "No subjects"
-                  )}
+                  )
+                  }
                 </td>
                 <td>
                   {editingId === t._id ? (

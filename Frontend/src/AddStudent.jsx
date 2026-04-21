@@ -30,6 +30,8 @@ export default function AddStudent() {
   return (
     <div className="add-student">
       <h2>Add Student</h2>
+      {message && <p className="message">{message}</p>}
+      
       <form onSubmit={handleSubmit}>
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
         <input name="username" placeholder="Username" value={form.username} onChange={handleChange} required />
@@ -48,7 +50,7 @@ export default function AddStudent() {
          <select name="faculty" value={form.faculty} onChange={handleChange} required >
           <option value="">Select Program</option>
           <option value="BCA">BCA</option>
-          <option value="CSIT">BSc CSIT</option>
+          <option value="BSc CSIT">BSc CSIT</option>
           <option value="BIM">BIM</option>
           <option value="BBA">BBA</option>
           

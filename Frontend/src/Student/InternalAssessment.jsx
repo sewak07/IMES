@@ -1,14 +1,13 @@
 import styles from "./StudentDashboard.module.css";
 
 export default function InternalAssessment({ performance }) {
-  // helper to get percentage
   const getPercentage = (value, max) => (max ? Math.round((value / max) * 100) : 0);
 
-  // helper to get bar color based on performance
+ 
   const getBarColor = (percentage) => {
-    if (percentage >= 80) return "#16a34a"; // green
-    if (percentage >= 50) return "#facc15"; // amber/yellow
-    return "#dc2626"; // red
+    if (percentage >= 80) return "#16a34a"; 
+    if (percentage >= 50) return "#facc15"; 
+    return "#dc2626";
   };
 
   return (

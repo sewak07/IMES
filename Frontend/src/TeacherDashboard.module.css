@@ -19,7 +19,7 @@
   color: #fff;
   font-size: 22px;
   font-weight: 600;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   position: relative;
@@ -78,12 +78,12 @@
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.2s ease;
 }
 
 .card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 /* --------------------
@@ -96,12 +96,23 @@
 }
 
 .subjectItem {
-  padding: 8px 0;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px 0;
   border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  align-items: center;
+}
+
+.subjectItem strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.subjectItem span {
+  color: #555;
+  font-size: 13px;
 }
 
 .subjectItem:hover {
@@ -109,6 +120,7 @@
   border-radius: 6px;
   padding-left: 8px;
 }
+
 
 /* --------------------
   Select Inputs
@@ -212,7 +224,7 @@
   background: #fff;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 400px;
 }
@@ -299,7 +311,7 @@
     font-size: 18px;
   }
 
-  .topBar h2{
+  .topBar h2 {
     font-size: 25px;
   }
 

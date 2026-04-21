@@ -198,7 +198,7 @@ export default function TeacherDashboard() {
               <ul className={styles.subjectList}>
                 {subjects.map((s, i) => (
                   <li key={i} className={styles.subjectItem}>
-                    <strong>{s.name}</strong> <span>Semester {s.semester}</span> <span>{s.faculty}</span>
+                    <strong>{s.name}</strong> <span>{s.semester}th sem</span> <span>{s.faculty}</span>
                   </li>
                 ))}
               </ul>
